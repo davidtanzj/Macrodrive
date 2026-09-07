@@ -357,4 +357,53 @@ SOURCES = [
         "enabled": True
     }
 
+
+,
+    # ========================================================
+    # ECONBROWSER
+    # Macroeconomic data and policy analysis.
+    # ========================================================
+
+    {
+        "name": "Econbrowser",
+        "type": "rss",
+        "url": "https://econbrowser.com/feed",
+        "max_articles": 20,
+        "text_mode": "provided",
+        "access_type": "free",
+        "enabled": True
+    },
+
+    # ========================================================
+    # MARGINAL REVOLUTION
+    # Broad economics blog; MacroDrive relevance filtering
+    # removes posts that are not macro-relevant.
+    # ========================================================
+
+    {
+        "name": "Marginal Revolution",
+        "type": "rss",
+        "url": "https://marginalrevolution.com/feed",
+        "max_articles": 20,
+        "text_mode": "provided",
+        "access_type": "free",
+        "enabled": True
+    },
+
+    # ========================================================
+    # CALCULATED RISK
+    # US housing and macroeconomic data analysis.
+    # Some Substack material may have restricted access.
+    # ========================================================
+
+    {
+        "name": "Calculated Risk",
+        "type": "rss",
+        "url": "https://calculatedrisk.substack.com/feed",
+        "max_articles": 20,
+        "text_mode": "provided",
+        "access_type": "unknown",
+        "enabled": True
+    }
+
 ]
