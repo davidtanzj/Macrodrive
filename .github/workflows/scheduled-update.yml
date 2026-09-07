@@ -1,4 +1,4 @@
-name: Update MacroDrive
+name: Scheduled MacroDrive Update
 
 on:
   workflow_dispatch:
