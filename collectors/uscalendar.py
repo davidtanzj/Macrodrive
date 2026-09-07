@@ -672,6 +672,15 @@ def fetch_bls_month(
         )
 
 
+        if response.status_code == 403:
+
+            print(
+                "BLS blocked this runner (HTTP 403). "
+                "Keeping existing BLS calendar events."
+            )
+
+            return None
+
         if (
             response.status_code
             == 404
@@ -858,11 +867,16 @@ def collect_bls():
         )
 
 
+        month_events = fetch_bls_month(
+            year,
+            month
+        )
+
+        if month_events is None:
+            break
+
         events.extend(
-            fetch_bls_month(
-                year,
-                month
-            )
+            month_events
         )
 
 

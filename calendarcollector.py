@@ -1,6 +1,6 @@
 from macrocalendar import (
     create_calendar_database,
-    save_event
+    save_events
 )
 
 from collectors import (
@@ -30,16 +30,17 @@ def run_calendar_collector():
     )
 
 
-    saved = 0
+    print(
+        f"Saving {len(events)} calendar events...",
+        flush=True
+    )
 
+    save_events(
+        events,
+        commit_every=25
+    )
 
-    for event in events:
-
-        save_event(
-            event
-        )
-
-        saved += 1
+    saved = len(events)
 
 
     print()

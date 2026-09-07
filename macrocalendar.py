@@ -12,7 +12,10 @@ DATABASE_NAME = "Macrodrive.db"
 
 def create_calendar_database():
 
-    connection = connect_database()
+    owns_connection = connection is None
+
+    if owns_connection:
+        connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -63,7 +66,7 @@ def create_calendar_database():
 # SAVE / UPDATE EVENT
 # ============================================================
 
-def save_event(event):
+def save_event(event, connection=None):
 
     connection = connect_database()
 
@@ -164,8 +167,39 @@ def save_event(event):
         now
     ))
 
-    connection.commit()
-    connection.close()
+    if owns_connection:
+        connection.commit()
+        connection.close()
+
+
+def save_events(events, commit_every=25):
+    connection = connect_database()
+
+    try:
+        for index, event in enumerate(events, start=1):
+            save_event(
+                event,
+                connection=connection
+            )
+
+            if (
+                index % commit_every == 0
+                or index == len(events)
+            ):
+                connection.commit()
+
+                print(
+                    f"Calendar database progress: "
+                    f"{index}/{len(events)}",
+                    flush=True
+                )
+
+    except Exception:
+        connection.rollback()
+        raise
+
+    finally:
+        connection.close()
 
 
 # ============================================================

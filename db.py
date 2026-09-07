@@ -79,6 +79,12 @@ def _checkout_postgres_connection():
             # Validate pooled connections before handing them to callers.
             with connection.cursor() as cursor:
                 cursor.execute("SELECT 1")
+                cursor.execute(
+                    "SET statement_timeout = '30s'"
+                )
+                cursor.execute(
+                    "SET lock_timeout = '10s'"
+                )
 
             return connection
 
