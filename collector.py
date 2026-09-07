@@ -74,8 +74,23 @@ def collect_articles():
         ):
             continue
 
+        source_name = source.get(
+            "name",
+            "Unknown source"
+        )
+
+        print(
+            f"Fetching: {source_name}...",
+            flush=True
+        )
+
         articles = collect_source(
             source
+        )
+
+        print(
+            f"  Found {len(articles)} articles.",
+            flush=True
         )
 
         all_articles.extend(
@@ -83,7 +98,6 @@ def collect_articles():
         )
 
     return all_articles
-
 
 def run_collector():
 
