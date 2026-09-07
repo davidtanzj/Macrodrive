@@ -34,7 +34,44 @@ HIGH_RELEVANCE_TERMS = [
     "natural gas",
     "bond market",
     "treasury yields",
-    "economic outlook"
+    "economic outlook",
+    "central bank",
+    "central banks",
+    "federal reserve",
+    "bank of england",
+    "bank of japan",
+    "european central bank",
+    "people's bank of china",
+    "pboc",
+    "fomc",
+    "rate cut",
+    "rate cuts",
+    "rate hike",
+    "rate hikes",
+    "policy rate",
+    "fiscal stimulus",
+    "government spending",
+    "sovereign debt",
+    "sanctions",
+    "export controls",
+    "trade restrictions",
+    "industrial production",
+    "retail sales",
+    "nonfarm payrolls",
+    "jobless claims",
+    "pmi",
+    "pce",
+    "china economy",
+    "chinese economy",
+    "yuan",
+    "renminbi",
+    "opec",
+    "brent",
+    "wti",
+    "copper",
+    "gold",
+    "yield curve",
+    "government bonds",
 ]
 
 
@@ -227,7 +264,7 @@ def calculate_relevance(
             )
 
     # Require meaningful evidence
-    relevant = score >= 6
+    relevant = score >= 4
 
     return {
         "relevant": relevant,

@@ -77,10 +77,14 @@ def get_articles():
 def save_relevance(
     article_id,
     relevant,
-    score
+    score,
+    connection=None
 ):
 
-    connection = connect_database()
+    owns_connection = connection is None
+
+    if owns_connection:
+        connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -98,8 +102,9 @@ def save_relevance(
         article_id
     ))
 
-    connection.commit()
-    connection.close()
+    if owns_connection:
+        connection.commit()
+        connection.close()
 
 
 def process_articles():
@@ -122,7 +127,12 @@ def process_articles():
         f"{len(articles)} articles...\n"
     )
 
-    for article in articles:
+    relevance_connection = connect_database()
+
+    for index, article in enumerate(
+        articles,
+        start=1
+    ):
 
         article_id = article[0]
         source = article[1]
@@ -156,8 +166,17 @@ def process_articles():
         save_relevance(
             article_id,
             relevance["relevant"],
-            relevance["score"]
+            relevance["score"],
+            connection=relevance_connection
         )
+
+        if index % 50 == 0:
+            relevance_connection.commit()
+            print(
+                f"Database progress: "
+                f"{index}/{len(articles)}",
+                flush=True
+            )
 
         if not relevance["relevant"]:
 
@@ -230,6 +249,9 @@ def process_articles():
                 category,
                 score
             )
+
+    relevance_connection.commit()
+    relevance_connection.close()
 
     print()
     print("=" * 70)
