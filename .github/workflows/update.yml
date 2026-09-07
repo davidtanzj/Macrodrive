@@ -1,9 +1,7 @@
-name: Scheduled MacroDrive Update
+name: Update MacroDrive
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/15 * * * *"
 
 jobs:
   update:
