@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-
+    <link
+    rel="icon"
+    type="image/png"
+    href="{{ url_for('static', filename='macrodrive-logo.png') }}"
+    >
     <meta charset="UTF-8">
 
     <meta
@@ -10,7 +14,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Macrodrive</title>
+    <title>MacroDrive</title>
 
     <link
         rel="stylesheet"
@@ -31,14 +35,15 @@
 
     <div class="header-content">
 
-        <div class="brand">
-
-            <a href="/">
-                Macrodrive
-            </a>
-
-
-        </div>
+        <a href="/" class="brand">
+            <img
+                src="{{ url_for('static', filename='macrodrive-logo.png') }}"
+                alt="MacroDrive logo"
+                class="brand-logo"
+            >
+            <span class="brand-name">MacroDrive</span>
+            <span class="brand-byline">Built by David Tan @linkedin.com/in/davidtanzj</span>
+        </a>
 
 
         <nav class="main-nav">
@@ -79,8 +84,8 @@
         </p>
 
         <h1>
-            Understand what is moving
-            the global economy.
+            What's moving
+            the global economy?
         </h1>
 
         <p class="hero-description">
