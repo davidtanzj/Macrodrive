@@ -45,7 +45,10 @@ def merge_links(cursor, keep_id, remove_id, table, foreign_key):
             INSERT INTO {table} (article_id, {foreign_key}, score)
             VALUES (?, ?, ?)
             ON CONFLICT(article_id, {foreign_key})
-            DO UPDATE SET score = MAX(score, excluded.score)
+            DO UPDATE SET score = GREATEST(
+            {table}.score,
+            excluded.score
+)
             """,
             (keep_id, target_id, score)
         )
