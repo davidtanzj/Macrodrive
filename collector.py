@@ -1,3 +1,6 @@
+import re
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+
 from database import (
     create_database,
     save_article,
@@ -8,6 +11,102 @@ from sources import SOURCES
 
 from collectors import rss
 from collectors import worldbank
+
+
+
+TRACKING_QUERY_KEYS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term",
+    "utm_content", "utm_id", "gclid", "fbclid", "mc_cid",
+    "mc_eid", "cmpid", "campaign_id", "campaign"
+}
+
+
+def canonicalize_url(url):
+    """Normalize URLs for duplicate detection without changing stored URLs."""
+    if not url:
+        return ""
+
+    try:
+        parts = urlsplit(url.strip())
+
+        query = [
+            (key, value)
+            for key, value in parse_qsl(
+                parts.query,
+                keep_blank_values=True
+            )
+            if key.lower() not in TRACKING_QUERY_KEYS
+        ]
+
+        path = parts.path.rstrip("/") or "/"
+
+        return urlunsplit((
+            parts.scheme.lower(),
+            parts.netloc.lower(),
+            path,
+            urlencode(query, doseq=True),
+            ""  # fragments never identify a different article
+        ))
+
+    except Exception:
+        return url.strip()
+
+
+def normalize_title(title):
+    """Conservative same-source title key for exact duplicate headlines."""
+    if not title:
+        return ""
+
+    title = title.lower()
+    title = re.sub(r"[^\w\s]", " ", title)
+    title = re.sub(r"\s+", " ", title).strip()
+    return title
+
+
+def deduplicate_candidates(articles, existing_urls):
+    """
+    Remove:
+    1. exact/canonical URL duplicates;
+    2. duplicate normalized titles from the SAME source in this collection.
+
+    Cross-publication stories are deliberately retained.
+    """
+    existing_canonical = {
+        canonicalize_url(url)
+        for url in existing_urls
+        if url
+    }
+
+    seen_urls = set(existing_canonical)
+    seen_source_titles = set()
+    unique = []
+    skipped_url = 0
+    skipped_title = 0
+
+    for article in articles:
+        url = article.get("url", "")
+        canonical = canonicalize_url(url)
+
+        if not canonical or canonical in seen_urls:
+            skipped_url += 1
+            continue
+
+        source = (article.get("source") or "").strip().lower()
+        title_key = normalize_title(article.get("title", ""))
+        source_title_key = (source, title_key)
+
+        if title_key and source_title_key in seen_source_titles:
+            skipped_title += 1
+            continue
+
+        seen_urls.add(canonical)
+
+        if title_key:
+            seen_source_titles.add(source_title_key)
+
+        unique.append(article)
+
+    return unique, skipped_url, skipped_title
 
 
 def collect_source(source):
@@ -109,12 +208,14 @@ def run_collector():
 
     existing_urls = get_existing_article_urls()
 
-    new_candidates = [
-        article
-        for article in articles
-        if article.get("url")
-        and article["url"] not in existing_urls
-    ]
+    (
+        new_candidates,
+        skipped_url_duplicates,
+        skipped_title_duplicates
+    ) = deduplicate_candidates(
+        articles,
+        existing_urls
+    )
 
     new_articles = 0
 
@@ -125,7 +226,8 @@ def run_collector():
 
     print(
         f"Collected: {len(articles)} | "
-        f"Already known: {len(articles) - len(new_candidates)} | "
+        f"URL duplicates: {skipped_url_duplicates} | "
+        f"Same-source title duplicates: {skipped_title_duplicates} | "
         f"New candidates: {len(new_candidates)}",
         flush=True
     )
