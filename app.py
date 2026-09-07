@@ -5,7 +5,7 @@ from macrocalendar import (
 )
 
 import sqlite3
-from db import connect_database
+from db import connect_database, using_postgres
 import re
 
 from datetime import (
@@ -27,7 +27,11 @@ from database import (
 
 
 app = Flask(__name__)
-
+print(
+    "DATABASE BACKEND:",
+    "PostgreSQL" if using_postgres() else "SQLite",
+    flush=True
+)
 
 def initialize_application_database():
     create_database()
