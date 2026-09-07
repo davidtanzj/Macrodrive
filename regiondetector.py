@@ -5,7 +5,8 @@ REGIONS = {
 
     "United States": [
         "united states", "u.s.", "u.s", "us economy",
-        "american economy", "federal reserve", "fomc",
+        "american economy", "federal reserve", "fomc", "fed",
+        "treasury", "treasuries", "white house", "wall street",
     ],
 
     "China": [
@@ -15,17 +16,18 @@ REGIONS = {
 
     "Eurozone": [
         "eurozone", "euro area", "european central bank", "ecb",
+        "euro", "bund", "bunds", "brussels",
         "germany", "german", "france", "french", "italy", "italian",
         "spain", "spanish", "netherlands", "dutch",
     ],
 
     "United Kingdom": [
         "united kingdom", "u.k.", "uk economy", "britain",
-        "british", "bank of england",
+        "british", "bank of england", "boe", "sterling", "gilts",
     ],
 
     "Japan": [
-        "japan", "japanese", "bank of japan", "boj",
+        "japan", "japanese", "bank of japan", "boj", "yen", "tokyo",
     ],
 
     "India": [
@@ -35,7 +37,7 @@ REGIONS = {
     "Southeast Asia": [
         "southeast asia", "asean",
         "singapore", "singaporean",
-        "thailand", "thai",
+        "thailand", "thai", "baht", "bank of thailand",
         "indonesia", "indonesian",
         "malaysia", "malaysian",
         "vietnam", "vietnamese",
@@ -93,6 +95,11 @@ def phrase_in_text(phrase, text):
 
 
 def detect_regions(title, body_text=""):
+
+    # Bare uppercase "US" is a common financial-news abbreviation.
+    # Only expand uppercase US so the English pronoun "us" is not misread.
+    if re.search(r"\bUS\b", title or ""):
+        title = (title or "") + " united states"
 
     # Geography in the headline/opening is much more likely to describe
     # the subject of the article than an incidental country mention later.

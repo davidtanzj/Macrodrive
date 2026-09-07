@@ -209,6 +209,7 @@ CATEGORY_RULES = {
 
         "strong": [
             "foreign exchange",
+            "sterling", "pound", "yen", "yuan", "renminbi", "dollar", "euro", "baht",
             "exchange rate",
             "exchange rates",
             "currency market",
@@ -238,6 +239,7 @@ CATEGORY_RULES = {
 
         "strong": [
             "crude oil",
+            "brent", "wti", "opec", "opec+",
             "oil prices",
             "natural gas",
             "iron ore",
@@ -275,6 +277,8 @@ CATEGORY_RULES = {
             "bond markets",
             "treasury yields",
             "treasury yield",
+            "treasuries", "treasury yields", "bond sell-off", "bond selloff",
+            "gilts", "bunds",
             "yield curve",
             "government bonds",
             "corporate bonds",
@@ -493,6 +497,9 @@ def central_bank_bonus(
         "pboc",
         "people's bank of china",
         "central bank",
+            "fed", "rate hike", "rate hikes", "raise rates", "raising rates",
+            "higher rates", "rate cut", "rate cuts", "cut rates", "lower rates",
+            "policy tightening", "policy easing",
         "central banks"
     ]
 
