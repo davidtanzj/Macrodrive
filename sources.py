@@ -359,24 +359,6 @@ SOURCES = [
 
 
 ,
-
-
-    # ========================================================
-    # MARGINAL REVOLUTION
-    # Broad economics blog; MacroDrive relevance filtering
-    # removes posts that are not macro-relevant.
-    # ========================================================
-
-    {
-        "name": "Marginal Revolution",
-        "type": "rss",
-        "url": "https://marginalrevolution.com/feed",
-        "max_articles": 20,
-        "text_mode": "provided",
-        "access_type": "free",
-        "enabled": True
-    }
-,
     # EUROPEAN CENTRAL BANK
     {
         "name": "European Central Bank",

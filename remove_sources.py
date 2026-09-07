@@ -3,6 +3,7 @@ from db import connect_database
 SOURCES_TO_REMOVE = (
     "Econbrowser",
     "Calculated Risk",
+    "Marginal Revolution",
 )
 
 
