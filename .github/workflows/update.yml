@@ -2,7 +2,6 @@ name: Update MacroDrive
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "17 */3 * * *"
 
