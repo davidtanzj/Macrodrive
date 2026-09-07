@@ -74,23 +74,8 @@ def collect_articles():
         ):
             continue
 
-        source_name = source.get(
-            "name",
-            "Unknown source"
-        )
-
-        print(
-            f"Fetching: {source_name}...",
-            flush=True
-        )
-
         articles = collect_source(
             source
-        )
-
-        print(
-            f"  Found {len(articles)} articles.",
-            flush=True
         )
 
         all_articles.extend(
@@ -98,6 +83,7 @@ def collect_articles():
         )
 
     return all_articles
+
 
 def run_collector():
 
@@ -112,7 +98,15 @@ def run_collector():
     print("NEW ARTICLES")
     print("=" * 70)
 
-    for article in articles:
+    print(
+        f"Saving {len(articles)} articles to database...",
+        flush=True
+    )
+
+    for index, article in enumerate(
+        articles,
+        start=1
+    ):
 
         if save_article(article):
 
@@ -121,17 +115,31 @@ def run_collector():
             print()
             print(
                 f"Source: "
-                f"{article['source']}"
+                f"{article['source']}",
+                flush=True
             )
 
             print(
                 f"Title: "
-                f"{article['title']}"
+                f"{article['title']}",
+                flush=True
             )
 
             print(
                 f"Access: "
-                f"{article['access_type']}"
+                f"{article['access_type']}",
+                flush=True
+            )
+
+        if (
+            index == 1
+            or index % 25 == 0
+            or index == len(articles)
+        ):
+            print(
+                f"Database progress: "
+                f"{index}/{len(articles)}",
+                flush=True
             )
 
     print()
