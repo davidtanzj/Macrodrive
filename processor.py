@@ -11,7 +11,8 @@ from database import (
     create_database,
     save_category,
     link_article_to_category,
-    clear_classifications
+    clear_classifications,
+    get_unclassified_articles
 )
 
 
@@ -53,25 +54,7 @@ def ensure_relevance_columns():
 
 def get_articles():
 
-    connection = connect_database()
-
-    cursor = connection.cursor()
-
-    cursor.execute("""
-        SELECT
-            id,
-            source,
-            title,
-            url,
-            body_text
-        FROM articles
-    """)
-
-    articles = cursor.fetchall()
-
-    connection.close()
-
-    return articles
+    return get_unclassified_articles()
 
 
 def save_relevance(
@@ -113,8 +96,6 @@ def process_articles():
 
     ensure_relevance_columns()
 
-    clear_classifications()
-
     articles = get_articles()
 
     relevant_count = 0
@@ -124,7 +105,7 @@ def process_articles():
 
     print(
         f"\nProcessing "
-        f"{len(articles)} articles...\n"
+        f"{len(articles)} NEW/UNCLASSIFIED articles...\n"
     )
 
     relevance_connection = connect_database()

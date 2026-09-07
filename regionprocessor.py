@@ -7,7 +7,9 @@ from database import (
     create_database,
     save_region,
     link_article_to_region,
-    clear_regions
+    clear_regions,
+    get_unprocessed_region_articles,
+    mark_region_processed
 )
 
 
@@ -16,24 +18,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def get_articles():
 
-    connection = connect_database()
-    cursor = connection.cursor()
-
-    cursor.execute("""
-        SELECT
-            id,
-            source,
-            title,
-            url,
-            body_text
-        FROM articles
-    """)
-
-    articles = cursor.fetchall()
-
-    connection.close()
-
-    return articles
+    return get_unprocessed_region_articles()
 
 
 def process_regions():
@@ -41,10 +26,7 @@ def process_regions():
     # Make sure database tables exist
     create_database()
 
-    # Remove old region classifications
-    clear_regions()
-
-    # Get all articles
+    # Get only articles not yet region-processed.
     articles = get_articles()
 
     print(
@@ -83,6 +65,8 @@ def process_regions():
 
             articles_without_regions += 1
 
+            mark_region_processed(article_id)
+
             continue
 
         # At least one region detected
@@ -109,6 +93,8 @@ def process_regions():
                 region,
                 score
             )
+
+        mark_region_processed(article_id)
 
     # Final report
     print("\n========================================")

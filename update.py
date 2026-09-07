@@ -54,6 +54,7 @@ def run_step(
     result = subprocess.run(
         [
             sys.executable,
+            "-u",
             filename
         ]
     )

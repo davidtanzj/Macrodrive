@@ -1,6 +1,7 @@
 from database import (
     create_database,
-    save_article
+    save_article,
+    get_existing_article_urls
 )
 
 from sources import SOURCES
@@ -74,8 +75,23 @@ def collect_articles():
         ):
             continue
 
+        source_name = source.get(
+            "name",
+            "Unknown source"
+        )
+
+        print(
+            f"Fetching: {source_name}...",
+            flush=True
+        )
+
         articles = collect_source(
             source
+        )
+
+        print(
+            f"  Found {len(articles)} articles.",
+            flush=True
         )
 
         all_articles.extend(
@@ -91,6 +107,15 @@ def run_collector():
 
     articles = collect_articles()
 
+    existing_urls = get_existing_article_urls()
+
+    new_candidates = [
+        article
+        for article in articles
+        if article.get("url")
+        and article["url"] not in existing_urls
+    ]
+
     new_articles = 0
 
     print()
@@ -99,46 +124,19 @@ def run_collector():
     print("=" * 70)
 
     print(
-        f"Saving {len(articles)} articles to database...",
+        f"Collected: {len(articles)} | "
+        f"Already known: {len(articles) - len(new_candidates)} | "
+        f"New candidates: {len(new_candidates)}",
         flush=True
     )
 
-    for index, article in enumerate(
-        articles,
-        start=1
-    ):
+    for index, article in enumerate(new_candidates, start=1):
 
         if save_article(article):
-
             new_articles += 1
-
-            print()
             print(
-                f"Source: "
-                f"{article['source']}",
-                flush=True
-            )
-
-            print(
-                f"Title: "
-                f"{article['title']}",
-                flush=True
-            )
-
-            print(
-                f"Access: "
-                f"{article['access_type']}",
-                flush=True
-            )
-
-        if (
-            index == 1
-            or index % 25 == 0
-            or index == len(articles)
-        ):
-            print(
-                f"Database progress: "
-                f"{index}/{len(articles)}",
+                f"[{index}/{len(new_candidates)}] "
+                f"{article['source']}: {article['title']}",
                 flush=True
             )
 

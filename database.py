@@ -44,7 +44,8 @@ def create_database():
 
             macro_relevant INTEGER,
 
-            relevance_score INTEGER
+            relevance_score INTEGER,
+            region_processed INTEGER DEFAULT 0
         )
     """)
 
@@ -81,8 +82,15 @@ def create_database():
             "INTEGER",
 
         "relevance_score":
-            "INTEGER"
+            "INTEGER",
+
+        "region_processed":
+            "INTEGER DEFAULT 0"
     }
+
+    region_processed_added = (
+        "region_processed" not in existing_columns
+    )
 
     for (
         column_name,
@@ -97,6 +105,12 @@ def create_database():
                 ADD COLUMN {column_name} {column_type}
                 """
             )
+
+    if region_processed_added:
+        cursor.execute("""
+            UPDATE articles
+            SET region_processed = 1
+        """)
 
 
     # ========================================================
@@ -463,6 +477,59 @@ def normalize_existing_dates():
 
 
     return updated, failed
+
+
+# ============================================================
+# INCREMENTAL ARTICLE HELPERS
+# ============================================================
+
+def get_existing_article_urls():
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute("SELECT url FROM articles")
+    urls = {row[0] for row in cursor.fetchall() if row[0]}
+    connection.close()
+    return urls
+
+
+def get_unclassified_articles():
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT id, source, title, url, body_text
+        FROM articles
+        WHERE macro_relevant IS NULL
+        ORDER BY id ASC
+    """)
+    rows = cursor.fetchall()
+    connection.close()
+    return rows
+
+
+def get_unprocessed_region_articles():
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT id, source, title, url, body_text
+        FROM articles
+        WHERE COALESCE(region_processed, 0) = 0
+        ORDER BY id ASC
+    """)
+    rows = cursor.fetchall()
+    connection.close()
+    return rows
+
+
+def mark_region_processed(article_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute("""
+        UPDATE articles
+        SET region_processed = 1
+        WHERE id = ?
+    """, (article_id,))
+    connection.commit()
+    connection.close()
 
 
 # ============================================================
