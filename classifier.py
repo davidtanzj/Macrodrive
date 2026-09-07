@@ -12,15 +12,20 @@ CATEGORY_RULES = {
         "threshold": 8,
 
         "strong": [
+            "fed",
+            "raise rates",
+            "raising rates",
+            "rate hike",
+            "rate hikes",
+            "rate cut",
+            "rate cuts",
+            "cut rates",
+            "lower rates",
             "monetary policy",
             "interest rate",
             "interest rates",
             "policy rate",
             "policy rates",
-            "rate cut",
-            "rate cuts",
-            "rate hike",
-            "rate hikes",
             "federal funds rate",
             "discount rate",
             "deposit rate",
@@ -58,7 +63,7 @@ CATEGORY_RULES = {
             "budget surplus",
             "fiscal deficit",
             "fiscal policy",
-            "budget", "budget deficit", "fiscal deficit", "government spending", "public spending", "tax cuts", "tax rises", "stimulus", "public debt",
+            "budget", "budget deficit", "fiscal deficit", "government spending", "public spending", "tax cuts", "tax rises", "public debt",
             "debt ceiling",
             "government borrowing"
         ],
@@ -75,6 +80,7 @@ CATEGORY_RULES = {
         ],
 
         "weak": [
+            "stimulus",
             "deficit",
             "taxation"
         ]
@@ -280,6 +286,10 @@ CATEGORY_RULES = {
         "threshold": 8,
 
         "strong": [
+            "bond",
+            "bonds",
+            "yield",
+            "yields",
             "bond market",
             "bond markets",
             "treasury yields",
@@ -301,7 +311,6 @@ CATEGORY_RULES = {
         ],
 
         "weak": [
-            "bonds",
             "equities"
         ]
     },
