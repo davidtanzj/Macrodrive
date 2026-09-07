@@ -12,10 +12,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def create_calendar_database():
 
-    owns_connection = connection is None
-
-    if owns_connection:
-        connection = connect_database()
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -68,7 +65,10 @@ def create_calendar_database():
 
 def save_event(event, connection=None):
 
-    connection = connect_database()
+    owns_connection = connection is None
+
+    if owns_connection:
+        connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -125,16 +125,29 @@ def save_event(event, connection=None):
                 excluded.importance,
 
             previous =
-                excluded.previous,
+                COALESCE(
+                    excluded.previous,
+                    calendar_events.previous
+                ),
 
             consensus =
-                excluded.consensus,
+                COALESCE(
+                    excluded.consensus,
+                    calendar_events.consensus
+                ),
 
             actual =
-                excluded.actual,
+                COALESCE(
+                    excluded.actual,
+                    calendar_events.actual
+                ),
 
             unit =
-                excluded.unit,
+                CASE
+                    WHEN excluded.unit != ''
+                    THEN excluded.unit
+                    ELSE calendar_events.unit
+                END,
 
             source =
                 excluded.source,
@@ -173,10 +186,19 @@ def save_event(event, connection=None):
 
 
 def save_events(events, commit_every=25):
+
+    if not events:
+        return
+
     connection = connect_database()
 
     try:
-        for index, event in enumerate(events, start=1):
+
+        for index, event in enumerate(
+            events,
+            start=1
+        ):
+
             save_event(
                 event,
                 connection=connection
@@ -186,6 +208,7 @@ def save_events(events, commit_every=25):
                 index % commit_every == 0
                 or index == len(events)
             ):
+
                 connection.commit()
 
                 print(
@@ -195,10 +218,12 @@ def save_events(events, commit_every=25):
                 )
 
     except Exception:
+
         connection.rollback()
         raise
 
     finally:
+
         connection.close()
 
 
