@@ -1,0 +1,84 @@
+name: Diagnose MacroDrive Database
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check production database
+        run: |
+          python - <<'PY'
+          from db import connect_database
+
+          connection = connect_database()
+          cursor = connection.cursor()
+
+          checks = [
+              ("All articles",
+               "SELECT COUNT(*) FROM articles"),
+
+              ("Macro relevant articles",
+               "SELECT COUNT(*) FROM articles WHERE macro_relevant = 1"),
+
+              ("Articles with text",
+               """SELECT COUNT(*) FROM articles
+                  WHERE body_text IS NOT NULL
+                  AND body_text != ''"""),
+
+              ("Categories",
+               "SELECT COUNT(*) FROM categories"),
+
+              ("Article-category links",
+               "SELECT COUNT(*) FROM article_categories"),
+
+              ("Regions",
+               "SELECT COUNT(*) FROM regions"),
+
+              ("Article-region links",
+               "SELECT COUNT(*) FROM article_regions"),
+
+              ("Calendar events",
+               "SELECT COUNT(*) FROM calendar_events"),
+
+              ("Calendar with previous",
+               """SELECT COUNT(*) FROM calendar_events
+                  WHERE previous IS NOT NULL
+                  AND previous != ''"""),
+
+              ("Calendar with actual",
+               """SELECT COUNT(*) FROM calendar_events
+                  WHERE actual IS NOT NULL
+                  AND actual != ''"""),
+          ]
+
+          print()
+          print("=" * 60)
+          print("MACRODRIVE PRODUCTION DATABASE")
+          print("=" * 60)
+
+          for name, query in checks:
+              cursor.execute(query)
+              result = cursor.fetchone()
+              print(f"{name:30} {result[0]}")
+
+          print("=" * 60)
+
+          connection.close()
+          PY
