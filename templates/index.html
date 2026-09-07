@@ -231,6 +231,7 @@
                         class="filter-chip filter-button"
                         data-filter-type="topic"
                         data-filter-value="{{ topic }}"
+                        data-topic="{{ topic }}"
                     >
                         {{ topic }}
                     </button>
@@ -259,6 +260,7 @@
                         class="filter-chip filter-button"
                         data-filter-type="region"
                         data-filter-value="{{ region }}"
+                        data-region="{{ region }}"
                     >
                         {{ region }}
                     </button>
@@ -287,6 +289,7 @@
                         class="filter-chip filter-button"
                         data-filter-type="source"
                         data-filter-value="{{ source }}"
+                        data-source-chip="{{ source }}"
                     >
                         {{ source }}
                     </button>
@@ -396,10 +399,11 @@
 
                 <div class="article-top">
 
-                    <div class="article-source">
-
-                        {{ article.source }}
-
+                    <div
+                        class="article-source"
+                        data-source-chip="{{ article.source }}"
+                    >
+                        <span>{{ article.source }}</span>
                     </div>
 
 
@@ -455,10 +459,11 @@
 
                         {% for category in article.categories %}
 
-                            <span class="topic-tag">
-
+                            <span
+                                class="topic-tag"
+                                data-topic="{{ category }}"
+                            >
                                 {{ category }}
-
                             </span>
 
                         {% endfor %}
@@ -476,10 +481,11 @@
 
                         {% for region in article.regions %}
 
-                            <span class="region-tag">
-
+                            <span
+                                class="region-tag"
+                                data-region="{{ region }}"
+                            >
                                 {{ region }}
-
                             </span>
 
                         {% endfor %}
@@ -622,6 +628,63 @@ const articleCards =
         )
     );
 
+
+const topicClassMap = {
+    "Central Banking & Rates": "topic-rates",
+    "Inflation & Prices": "topic-inflation",
+    "Jobs & Wages": "topic-jobs",
+    "Growth & GDP": "topic-growth",
+    "Government Debt & Tax": "topic-fiscal",
+    "Global Trade & Geopolitics": "topic-trade",
+    "Currencies & FX": "topic-fx",
+    "Bonds & Markets": "topic-bonds",
+    "Commodities & Energy": "topic-commodities",
+    "General Macro & Markets": "topic-general",
+    "Economic Theory": "topic-theory"
+};
+
+
+document
+    .querySelectorAll("[data-topic]")
+    .forEach(function (element) {
+
+        const topicClass =
+            topicClassMap[element.dataset.topic];
+
+        if (topicClass) {
+            element.classList.add(topicClass);
+        }
+
+    });
+
+
+
+const regionAssetMap = {
+    "United States": "united-states.svg",
+    "China": "china.svg",
+    "Eurozone": "eurozone.svg",
+    "United Kingdom": "united-kingdom.svg",
+    "Japan": "japan.svg",
+    "India": "india.svg",
+    "Southeast Asia": "southeast-asia.svg",
+    "South Korea": "south-korea.svg",
+    "Australia & New Zealand": "australia-new-zealand.svg",
+    "Middle East": "middle-east.svg",
+    "Canada": "canada.svg",
+    "Latin America": "latin-america.svg",
+    "Africa": "africa.svg"
+};
+
+document.querySelectorAll("[data-region]").forEach(function (element) {
+    const asset = regionAssetMap[element.dataset.region];
+    if (asset) {
+        element.style.setProperty(
+            "--watermark-image",
+            "url('/static/region-flags/" + asset + "')"
+        );
+        element.classList.add("region-visual");
+    }
+});
 
 /* ==========================================================
    HELPERS
