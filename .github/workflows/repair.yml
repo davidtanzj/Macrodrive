@@ -1,0 +1,36 @@
+name: Repair MacroDrive Production Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BEA_API_KEY: ${{ secrets.BEA_API_KEY }}
+      CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Rebuild article classifications
+        run: python -u processor.py
+
+      - name: Rebuild article regions
+        run: python -u regionprocessor.py
+
+      - name: Update calendar values
+        run: python -u calendarvalues.py
