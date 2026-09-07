@@ -1,4 +1,5 @@
 import sqlite3
+from db import connect_database
 
 from dateutils import normalize_date
 
@@ -12,9 +13,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def create_database():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -192,9 +191,7 @@ def create_database():
 
 def save_article(article):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -377,9 +374,7 @@ def update_article_access(
         return
 
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -407,9 +402,7 @@ def update_article_access(
 
 def normalize_existing_dates():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -478,9 +471,7 @@ def normalize_existing_dates():
 
 def get_articles_without_text():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -517,9 +508,7 @@ def save_article_text(
     body_text
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -549,9 +538,7 @@ def save_category(
     category_name
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -578,9 +565,7 @@ def link_article_to_category(
     score
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -645,9 +630,7 @@ def link_article_to_category(
 
 def clear_classifications():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -675,9 +658,7 @@ def save_region(
     region_name
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -704,9 +685,7 @@ def link_article_to_region(
     score
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -812,9 +791,7 @@ def link_article_to_region(
 
 def clear_regions():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 

@@ -1,4 +1,5 @@
 import sqlite3
+from db import connect_database
 from datetime import datetime, timezone
 
 
@@ -11,9 +12,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def create_calendar_database():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -66,9 +65,7 @@ def create_calendar_database():
 
 def save_event(event):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -177,9 +174,7 @@ def save_event(event):
 
 def get_calendar_events():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     connection.row_factory = sqlite3.Row
 
@@ -210,9 +205,7 @@ def get_calendar_events():
 
 def get_calendar_countries():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 

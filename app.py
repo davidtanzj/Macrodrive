@@ -5,6 +5,7 @@ from macrocalendar import (
 )
 
 import sqlite3
+from db import connect_database
 import re
 
 from datetime import (
@@ -26,6 +27,16 @@ from database import (
 
 
 app = Flask(__name__)
+
+
+def initialize_application_database():
+    create_database()
+    create_calendar_database()
+    normalize_existing_dates()
+
+
+initialize_application_database()
+
 
 DATABASE_NAME = "Macrodrive.db"
 
@@ -73,9 +84,7 @@ def format_date(
 
 def get_filter_options():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -352,9 +361,7 @@ def get_browse_articles():
     )
 
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
 
     connection.row_factory = (
@@ -606,9 +613,7 @@ def search_articles(
         return []
 
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
 
     connection.row_factory = (
@@ -799,10 +804,6 @@ def calendar_page():
 # ============================================================
 
 if __name__ == "__main__":
-
-    create_database()
-
-    normalize_existing_dates()
 
     app.run(
         debug=True

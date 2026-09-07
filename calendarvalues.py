@@ -3,6 +3,7 @@ import io
 import os
 import re
 import sqlite3
+from db import connect_database as shared_connect_database
 from datetime import datetime, timezone
 
 import requests
@@ -29,7 +30,7 @@ BLS_SERIES = {
 # ============================================================
 
 def connect_database():
-    connection = sqlite3.connect(DATABASE_NAME)
+    connection = shared_connect_database()
     connection.row_factory = sqlite3.Row
     return connection
 
