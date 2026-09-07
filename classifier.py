@@ -58,6 +58,7 @@ CATEGORY_RULES = {
             "budget surplus",
             "fiscal deficit",
             "fiscal policy",
+            "budget", "budget deficit", "fiscal deficit", "government spending", "public spending", "tax cuts", "tax rises", "stimulus", "public debt",
             "debt ceiling",
             "government borrowing"
         ],
@@ -97,6 +98,7 @@ CATEGORY_RULES = {
 
         "medium": [
             "inflation",
+            "cpi", "consumer prices", "producer prices", "pce inflation", "core inflation", "headline inflation", "price pressures", "disinflation", "deflation",
             "consumer prices",
             "producer prices",
             "deflation",
@@ -120,6 +122,7 @@ CATEGORY_RULES = {
             "gross domestic product",
             "gdp growth",
             "economic growth",
+            "gdp", "growth", "recession", "slowdown", "contraction", "expansion", "pmi", "industrial production", "retail sales", "business activity",
             "economic contraction",
             "economic expansion",
             "economic slowdown",
@@ -159,6 +162,7 @@ CATEGORY_RULES = {
         "medium": [
             "unemployment",
             "employment",
+            "jobs", "job market", "labour market", "labor market", "payrolls", "nonfarm payrolls", "unemployment", "wages", "wage growth", "jobless claims",
             "payrolls",
             "wages",
             "job growth"
@@ -198,6 +202,7 @@ CATEGORY_RULES = {
 
         "weak": [
             "trade",
+            "tariff", "tariffs", "trade war", "trade deal", "export controls", "exports", "imports", "trade deficit", "trade surplus", "supply chains",
             "geopolitical"
         ]
     },
@@ -209,6 +214,7 @@ CATEGORY_RULES = {
 
         "strong": [
             "foreign exchange",
+            "fx", "currency", "currencies", "exchange rate", "exchange rates", "currency intervention", "devaluation", "appreciation", "depreciation",
             "sterling", "pound", "yen", "yuan", "renminbi", "dollar", "euro", "baht",
             "exchange rate",
             "exchange rates",
@@ -239,6 +245,7 @@ CATEGORY_RULES = {
 
         "strong": [
             "crude oil",
+            "oil", "energy prices", "petroleum", "natural gas", "lng", "copper", "gold", "iron ore", "coal", "metals", "commodity prices",
             "brent", "wti", "opec", "opec+",
             "oil prices",
             "natural gas",
@@ -497,6 +504,7 @@ def central_bank_bonus(
         "pboc",
         "people's bank of china",
         "central bank",
+            "central bankers", "monetary policy", "interest rates", "policy rates", "benchmark rate", "basis points", "hawkish", "dovish", "tightening cycle", "easing cycle",
             "fed", "rate hike", "rate hikes", "raise rates", "raising rates",
             "higher rates", "rate cut", "rate cuts", "cut rates", "lower rates",
             "policy tightening", "policy easing",

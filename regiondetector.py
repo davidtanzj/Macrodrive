@@ -36,12 +36,12 @@ REGIONS = {
 
     "Southeast Asia": [
         "southeast asia", "asean",
-        "singapore", "singaporean",
+        "singapore", "singaporean", "singapore dollar", "mas",
         "thailand", "thai", "baht", "bank of thailand",
-        "indonesia", "indonesian",
-        "malaysia", "malaysian",
-        "vietnam", "vietnamese",
-        "philippines", "philippine",
+        "indonesia", "indonesian", "rupiah", "bank indonesia",
+        "malaysia", "malaysian", "ringgit", "bank negara",
+        "vietnam", "vietnamese", "dong",
+        "philippines", "philippine", "peso", "bangko sentral",
         "myanmar", "burma", "cambodia", "cambodian",
         "laos", "brunei",
     ],
@@ -59,6 +59,7 @@ REGIONS = {
     "Middle East": [
         "middle east", "gulf states", "gulf countries",
         "saudi arabia", "saudi", "uae", "united arab emirates",
+        "dubai", "abu dhabi", "riyadh", "israeli", "iranian",
         "qatar", "israel", "iran", "iraq", "kuwait", "oman", "bahrain",
     ],
 
@@ -69,6 +70,8 @@ REGIONS = {
     "Latin America": [
         "latin america", "latin american",
         "brazil", "brazilian", "mexico", "mexican",
+        "venezuela", "venezuelan", "bolivia", "bolivian", "ecuador", "ecuadorian",
+        "uruguay", "uruguayan", "paraguay", "paraguayan",
         "argentina", "argentine", "chile", "chilean",
         "colombia", "colombian", "peru", "peruvian",
     ],
