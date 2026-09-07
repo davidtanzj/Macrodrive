@@ -1,4 +1,5 @@
 import sqlite3
+from db import connect_database
 
 from regiondetector import detect_regions
 
@@ -15,7 +16,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def get_articles():
 
-    connection = sqlite3.connect(DATABASE_NAME)
+    connection = connect_database()
     cursor = connection.cursor()
 
     cursor.execute("""

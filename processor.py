@@ -1,4 +1,5 @@
 import sqlite3
+from db import connect_database
 
 from classifier import classify_article
 
@@ -19,9 +20,7 @@ DATABASE_NAME = "Macrodrive.db"
 
 def ensure_relevance_columns():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -54,9 +53,7 @@ def ensure_relevance_columns():
 
 def get_articles():
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
@@ -83,9 +80,7 @@ def save_relevance(
     score
 ):
 
-    connection = sqlite3.connect(
-        DATABASE_NAME
-    )
+    connection = connect_database()
 
     cursor = connection.cursor()
 
