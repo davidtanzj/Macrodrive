@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Macrodrive</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ====================================================== -->
+<!-- HEADER -->
+<!-- ====================================================== -->
+
+<header class="site-header">
+
+    <div class="header-content">
+
+        <div class="brand">
+
+            <a href="/">
+                Macrodrive
+            </a>
+
+
+        </div>
+
+
+        <nav class="main-nav">
+
+            <a
+                href="/"
+                class="active"
+            >
+                NEWS
+            </a>
+
+            <a href="/calendar">
+                CALENDAR
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- ====================================================== -->
+<!-- MAIN -->
+<!-- ====================================================== -->
+
+<main class="container">
+
+
+    <!-- ================================================== -->
+    <!-- HERO -->
+    <!-- ================================================== -->
+
+    <section class="hero">
+
+        <p class="eyebrow">
+            GLOBAL MACRO NEWS
+        </p>
+
+        <h1>
+            Understand what is moving
+            the global economy.
+        </h1>
+
+        <p class="hero-description">
+
+            Economic news from global financial
+            publications, central banks and
+            international institutions.
+
+        </p>
+
+    </section>
+
+
+    <!-- ================================================== -->
+    <!-- SEARCH -->
+    <!-- ================================================== -->
+
+    <section class="search-section">
+
+        <form
+            method="GET"
+            action="/"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="q"
+                value="{{ search_query }}"
+                placeholder="Search the Macrodrive archive..."
+                class="search-input"
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                class="search-button"
+            >
+                Search
+            </button>
+
+        </form>
+
+
+        {% if search_mode %}
+
+            <div class="active-filters">
+
+                <span>
+
+                    Search results for
+
+                    <strong>
+                        "{{ search_query }}"
+                    </strong>
+
+                </span>
+
+
+                <a href="/">
+                    Exit search
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ================================================== -->
+    <!-- FILTERS -->
+    <!-- ================================================== -->
+
+    <section class="filters">
+
+
+        <!-- TIME RANGE -->
+
+        <div class="filter-section">
+
+            <div class="filter-label">
+                TIME RANGE
+            </div>
+
+            <div class="filter-row">
+
+                <button
+                    type="button"
+                    class="filter-chip time-button"
+                    data-days="1"
+                >
+                    24 Hours
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-chip time-button"
+                    data-days="7"
+                >
+                    7 Days
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-chip time-button"
+                    data-days="30"
+                >
+                    30 Days
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-chip time-button"
+                    data-days="183"
+                >
+                    6 Months
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-chip time-button"
+                    data-days="all"
+                >
+                    All Time
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOPICS -->
+
+        <div class="filter-section">
+
+            <div class="filter-label">
+                TOPICS
+            </div>
+
+            <div class="filter-row">
+
+                {% for topic in topics %}
+
+                    <button
+                        type="button"
+                        class="filter-chip filter-button"
+                        data-filter-type="topic"
+                        data-filter-value="{{ topic }}"
+                    >
+                        {{ topic }}
+                    </button>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- REGIONS -->
+
+        <div class="filter-section">
+
+            <div class="filter-label">
+                REGIONS
+            </div>
+
+            <div class="filter-row">
+
+                {% for region in regions %}
+
+                    <button
+                        type="button"
+                        class="filter-chip filter-button"
+                        data-filter-type="region"
+                        data-filter-value="{{ region }}"
+                    >
+                        {{ region }}
+                    </button>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- SOURCES -->
+
+        <div class="filter-section">
+
+            <div class="filter-label">
+                SOURCES
+            </div>
+
+            <div class="filter-row">
+
+                {% for source in sources %}
+
+                    <button
+                        type="button"
+                        class="filter-chip filter-button"
+                        data-filter-type="source"
+                        data-filter-value="{{ source }}"
+                    >
+                        {{ source }}
+                    </button>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER CONTROLS -->
+
+        <div class="filter-actions">
+
+            <span id="filter-summary">
+                0 filters selected
+            </span>
+
+            <button
+                type="button"
+                id="clear-filters"
+                class="clear-button"
+            >
+                Clear filters
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================================================== -->
+    <!-- RESULTS -->
+    <!-- ================================================== -->
+
+    <section class="results-header">
+
+        <div>
+
+            <p class="eyebrow">
+
+                {% if search_mode %}
+
+                    SEARCH RESULTS
+
+                {% else %}
+
+                    LATEST
+
+                {% endif %}
+
+            </p>
+
+
+            <h2>
+
+                {% if search_mode %}
+
+                    Archive Search
+
+                {% else %}
+
+                    Economic News
+
+                {% endif %}
+
+            </h2>
+
+        </div>
+
+
+        <div
+            class="result-count"
+            id="result-count"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- ================================================== -->
+    <!-- ARTICLES -->
+    <!-- ================================================== -->
+
+    <section class="article-list">
+
+
+        {% for article in articles %}
+
+
+            <article
+                class="article-card"
+
+                data-source="{{ article.source|e }}"
+
+                data-topics="{{ article.categories|join('|||')|e }}"
+
+                data-regions="{{ article.regions|join('|||')|e }}"
+
+                data-published="{{ article.published_at or '' }}"
+            >
+
+
+                <!-- ARTICLE METADATA -->
+
+                <div class="article-top">
+
+                    <div class="article-source">
+
+                        {{ article.source }}
+
+                    </div>
+
+
+                    <div class="article-meta">
+
+                        <span class="article-date">
+
+                            {{ article.display_date }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ARTICLE TITLE -->
+
+                <h3>
+
+                    <a
+                        href="{{ article.url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        {{ article.title }}
+
+                    </a>
+
+                </h3>
+
+
+                <!-- DESCRIPTION -->
+
+                {% if article.description %}
+
+                    <p class="article-description">
+
+                        {{ article.description }}
+
+                    </p>
+
+                {% endif %}
+
+
+                <!-- TOPIC TAGS -->
+
+                {% if article.categories %}
+
+                    <div class="tag-row">
+
+                        {% for category in article.categories %}
+
+                            <span class="topic-tag">
+
+                                {{ category }}
+
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- REGION TAGS -->
+
+                {% if article.regions %}
+
+                    <div class="region-row">
+
+                        {% for region in article.regions %}
+
+                            <span class="region-tag">
+
+                                {{ region }}
+
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- ARTICLE ACTION -->
+
+                <div class="article-footer">
+
+                    <a
+                        href="{{ article.url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        Read original →
+
+                    </a>
+
+                </div>
+
+
+            </article>
+
+
+        {% endfor %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+            class="empty-state"
+            id="empty-state"
+            hidden
+        >
+
+            <h3>
+                No articles found
+            </h3>
+
+            <p>
+
+                Try broadening your search,
+                increasing the time range,
+                or removing some filters.
+
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- ====================================================== -->
+<!-- FOOTER -->
+<!-- ====================================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-content">
+
+        <strong>
+            Macrodrive
+        </strong>
+
+        <span>
+            Global Macroeconomic Intelligence
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- ====================================================== -->
+<!-- PAGE DATA -->
+<!-- ====================================================== -->
+
+<div
+    id="page-data"
+    data-search-mode="{% if search_mode %}true{% else %}false{% endif %}"
+    hidden
+></div>
+
+
+<!-- ====================================================== -->
+<!-- NEWS FILTER JAVASCRIPT -->
+<!-- ====================================================== -->
+
+<script>
+
+
+const pageData =
+    document.getElementById(
+        "page-data"
+    );
+
+
+const searchMode =
+    pageData.dataset.searchMode
+    === "true";
+
+
+const selectedTopics =
+    new Set();
+
+
+const selectedRegions =
+    new Set();
+
+
+const selectedSources =
+    new Set();
+
+
+/*
+Normal browsing defaults to 30 days.
+
+Search mode defaults to All Time.
+*/
+
+let selectedDays =
+    searchMode
+        ? "all"
+        : 30;
+
+
+const articleCards =
+    Array.from(
+        document.querySelectorAll(
+            ".article-card"
+        )
+    );
+
+
+/* ==========================================================
+   HELPERS
+   ========================================================== */
+
+
+function splitValues(value) {
+
+    if (!value) {
+
+        return [];
+
+    }
+
+
+    return value
+        .split("|||")
+        .filter(Boolean);
+
+}
+
+
+function overlaps(
+    selected,
+    values
+) {
+
+    if (
+        selected.size === 0
+    ) {
+
+        return true;
+
+    }
+
+
+    for (
+        const item
+        of selected
+    ) {
+
+        if (
+            values.includes(item)
+        ) {
+
+            return true;
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* ==========================================================
+   TIME BUTTONS
+   ========================================================== */
+
+
+function updateTimeButtons() {
+
+    document
+        .querySelectorAll(
+            ".time-button"
+        )
+        .forEach(
+            function (button) {
+
+                const value =
+                    button.dataset.days;
+
+
+                const active =
+                    (
+                        selectedDays === "all"
+                        &&
+                        value === "all"
+                    )
+                    ||
+                    (
+                        selectedDays !== "all"
+                        &&
+                        Number(value)
+                        === selectedDays
+                    );
+
+
+                button.classList.toggle(
+                    "active",
+                    active
+                );
+
+            }
+        );
+
+}
+
+
+/* ==========================================================
+   APPLY FILTERS
+   ========================================================== */
+
+
+function applyFilters() {
+
+    const now =
+        new Date();
+
+
+    let cutoff =
+        null;
+
+
+    if (
+        selectedDays !== "all"
+    ) {
+
+        cutoff =
+            new Date(
+
+                now.getTime()
+
+                -
+
+                selectedDays
+                * 24
+                * 60
+                * 60
+                * 1000
+
+            );
+
+    }
+
+
+    let visibleCount =
+        0;
+
+
+    for (
+        const card
+        of articleCards
+    ) {
+
+
+        const topics =
+            splitValues(
+                card.dataset.topics
+            );
+
+
+        const regions =
+            splitValues(
+                card.dataset.regions
+            );
+
+
+        const source =
+            card.dataset.source;
+
+
+        const topicMatch =
+            overlaps(
+                selectedTopics,
+                topics
+            );
+
+
+        const regionMatch =
+            overlaps(
+                selectedRegions,
+                regions
+            );
+
+
+        const sourceMatch =
+            (
+                selectedSources.size === 0
+
+                ||
+
+                selectedSources.has(
+                    source
+                )
+            );
+
+
+        let timeMatch =
+            true;
+
+
+        if (
+            selectedDays !== "all"
+        ) {
+
+
+            const rawDate =
+                card.dataset.published;
+
+
+            if (!rawDate) {
+
+
+                timeMatch =
+                    false;
+
+
+            } else {
+
+
+                const articleDate =
+                    new Date(
+                        rawDate
+                    );
+
+
+                timeMatch =
+                    (
+                        !Number.isNaN(
+                            articleDate.getTime()
+                        )
+
+                        &&
+
+                        articleDate >= cutoff
+
+                        &&
+
+                        articleDate <= now
+                    );
+
+            }
+
+        }
+
+
+        const visible =
+            topicMatch
+
+            &&
+
+            regionMatch
+
+            &&
+
+            sourceMatch
+
+            &&
+
+            timeMatch;
+
+
+        card.hidden =
+            !visible;
+
+
+        if (visible) {
+
+            visibleCount += 1;
+
+        }
+
+    }
+
+
+    /* RESULT COUNT */
+
+    document
+        .getElementById(
+            "result-count"
+        )
+        .textContent =
+
+            visibleCount
+
+            +
+
+            (
+                visibleCount === 1
+                    ? " article"
+                    : " articles"
+            );
+
+
+    /* EMPTY STATE */
+
+    document
+        .getElementById(
+            "empty-state"
+        )
+        .hidden =
+
+            visibleCount !== 0;
+
+
+    /* FILTER COUNT */
+
+    const filterCount =
+
+        selectedTopics.size
+
+        +
+
+        selectedRegions.size
+
+        +
+
+        selectedSources.size;
+
+
+    document
+        .getElementById(
+            "filter-summary"
+        )
+        .textContent =
+
+            filterCount
+
+            +
+
+            (
+                filterCount === 1
+                    ? " filter selected"
+                    : " filters selected"
+            );
+
+}
+
+
+/* ==========================================================
+   TOPIC / REGION / SOURCE FILTERS
+   ========================================================== */
+
+
+document
+    .querySelectorAll(
+        ".filter-button"
+    )
+    .forEach(
+        function (button) {
+
+
+            button.addEventListener(
+                "click",
+                function () {
+
+
+                    const type =
+                        button.dataset.filterType;
+
+
+                    const value =
+                        button.dataset.filterValue;
+
+
+                    let target;
+
+
+                    if (
+                        type === "topic"
+                    ) {
+
+
+                        target =
+                            selectedTopics;
+
+
+                    } else if (
+                        type === "region"
+                    ) {
+
+
+                        target =
+                            selectedRegions;
+
+
+                    } else {
+
+
+                        target =
+                            selectedSources;
+
+                    }
+
+
+                    if (
+                        target.has(value)
+                    ) {
+
+
+                        target.delete(
+                            value
+                        );
+
+
+                        button.classList.remove(
+                            "active"
+                        );
+
+
+                    } else {
+
+
+                        target.add(
+                            value
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+                    applyFilters();
+
+                }
+            );
+
+        }
+    );
+
+
+/* ==========================================================
+   TIME FILTERS
+   ========================================================== */
+
+
+document
+    .querySelectorAll(
+        ".time-button"
+    )
+    .forEach(
+        function (button) {
+
+
+            button.addEventListener(
+                "click",
+                function () {
+
+
+                    const value =
+                        button.dataset.days;
+
+
+                    if (
+                        value === "all"
+                    ) {
+
+
+                        selectedDays =
+                            "all";
+
+
+                    } else {
+
+
+                        selectedDays =
+                            Number(value);
+
+                    }
+
+
+                    updateTimeButtons();
+
+
+                    applyFilters();
+
+                }
+            );
+
+        }
+    );
+
+
+/* ==========================================================
+   CLEAR FILTERS
+   ========================================================== */
+
+
+document
+    .getElementById(
+        "clear-filters"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+
+            selectedTopics.clear();
+
+
+            selectedRegions.clear();
+
+
+            selectedSources.clear();
+
+
+            document
+                .querySelectorAll(
+                    ".filter-button"
+                )
+                .forEach(
+                    function (button) {
+
+
+                        button.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            applyFilters();
+
+        }
+    );
+
+
+/* ==========================================================
+   INITIAL PAGE LOAD
+   ========================================================== */
+
+
+updateTimeButtons();
+
+
+applyFilters();
+
+
+</script>
+
+
+</body>
+
+</html>

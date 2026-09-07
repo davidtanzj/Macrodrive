@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Macro Calendar · Macrodrive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-content">
+        <div class="brand">
+            <a href="/">Macrodrive</a>
+            <span>Global Macroeconomic Intelligence</span>
+        </div>
+        <nav class="main-nav">
+            <a href="/">NEWS</a>
+            <a href="/calendar" class="active">CALENDAR</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero calendar-hero">
+        <p class="eyebrow">US MACRO CALENDAR</p>
+        <h1>Key US economic events at a glance.</h1>
+        <p class="hero-description">
+            Track major US economic releases and Federal Reserve events in your local time.
+        </p>
+    </section>
+
+    <section class="calendar-legend" aria-label="Calendar categories">
+        <span class="legend-item category-rates">Fed / Rates</span>
+        <span class="legend-item category-inflation">Inflation</span>
+        <span class="legend-item category-labor">Labor</span>
+        <span class="legend-item category-growth">Growth</span>
+        <span class="legend-item category-consumer">Consumer</span>
+        <span class="legend-item category-trade">Trade</span>
+    </section>
+
+    <div class="calendar-timezone">
+        <span>TIMEZONE</span>
+        <strong id="calendar-timezone-label">Local time</strong>
+    </div>
+
+    <section class="month-calendar">
+        <div class="calendar-toolbar">
+            <button type="button" class="calendar-nav-button" id="previous-month" aria-label="Previous month">‹</button>
+            <div class="calendar-current-month">
+                <p class="eyebrow">MACRO SCHEDULE</p>
+                <h2 id="calendar-month-title"></h2>
+            </div>
+            <button type="button" class="calendar-nav-button" id="next-month" aria-label="Next month">›</button>
+            <button type="button" class="calendar-today-button" id="calendar-today">Today</button>
+        </div>
+
+        <div class="calendar-weekdays">
+            <div>MON</div><div>TUE</div><div>WED</div><div>THU</div>
+            <div>FRI</div><div>SAT</div><div>SUN</div>
+        </div>
+
+        <div class="calendar-grid" id="calendar-grid"></div>
+    </section>
+
+    <section class="calendar-day-details" id="calendar-day-details">
+        <div class="selected-day-header">
+            <div>
+                <p class="eyebrow">SELECTED DATE</p>
+                <h2 id="selected-day-title"></h2>
+            </div>
+            <div class="result-count" id="selected-day-count"></div>
+        </div>
+
+        <div id="selected-day-events"></div>
+
+        <div class="empty-state calendar-day-empty" id="selected-day-empty" hidden>
+            <h3>No economic events</h3>
+            <p>There are no US macro events scheduled for this date.</p>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <strong>Macrodrive</strong>
+        <span>Global Macroeconomic Intelligence</span>
+    </div>
+</footer>
+
+<script id="calendar-event-data" type="application/json">
+{{ events|tojson }}
+</script>
+
+<script>
+const allEvents = JSON.parse(
+    document.getElementById("calendar-event-data").textContent
+);
+
+const now = new Date();
+let displayedYear = now.getFullYear();
+let displayedMonth = now.getMonth();
+let selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+function startOfDay(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function sameDay(first, second) {
+    return (
+        first.getFullYear() === second.getFullYear()
+        && first.getMonth() === second.getMonth()
+        && first.getDate() === second.getDate()
+    );
+}
+
+function eventDate(event) {
+    return new Date(event.scheduled_at);
+}
+
+function eventsForDate(date) {
+    return allEvents
+        .filter(function (event) {
+            const value = eventDate(event);
+            return !Number.isNaN(value.getTime()) && sameDay(value, date);
+        })
+        .sort(function (a, b) {
+            return eventDate(a) - eventDate(b);
+        });
+}
+
+function escapeHtml(value) {
+    const div = document.createElement("div");
+    div.textContent = value ?? "";
+    return div.innerHTML;
+}
+
+function categoryClass(eventType) {
+    const type = (eventType || "").toLowerCase();
+
+    if (type.includes("central banking") || type.includes("rates")) {
+        return "category-rates";
+    }
+    if (
+        type.includes("inflation & consumer")
+        || type.includes("consumer")
+        || type.includes("spending")
+    ) {
+        return "category-consumer";
+    }
+    if (type.includes("inflation")) {
+        return "category-inflation";
+    }
+    if (
+        type.includes("jobs")
+        || type.includes("wages")
+        || type.includes("labor")
+        || type.includes("labour")
+    ) {
+        return "category-labor";
+    }
+    if (
+        type.includes("growth")
+        || type.includes("gdp")
+        || type.includes("production")
+        || type.includes("housing")
+        || type.includes("investment")
+    ) {
+        return "category-growth";
+    }
+    if (type.includes("trade")) {
+        return "category-trade";
+    }
+    return "category-other";
+}
+
+function renderTimezone() {
+    const timeZone =
+        Intl.DateTimeFormat().resolvedOptions().timeZone || "Local time";
+
+    let offset = "";
+
+    try {
+        const parts = new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone: timeZone,
+                timeZoneName: "longOffset"
+            }
+        ).formatToParts(new Date());
+
+        const zonePart = parts.find(
+            function (part) {
+                return part.type === "timeZoneName";
+            }
+        );
+
+        if (zonePart) {
+            offset = zonePart.value;
+        }
+    } catch (error) {
+        offset = "";
+    }
+
+    document.getElementById("calendar-timezone-label").textContent =
+        timeZone + (offset ? " (" + offset + ")" : "");
+}
+
+function renderMonthTitle() {
+    const monthDate = new Date(displayedYear, displayedMonth, 1);
+
+    document.getElementById("calendar-month-title").textContent =
+        monthDate.toLocaleDateString(
+            undefined,
+            { month: "long", year: "numeric" }
+        );
+}
+
+function renderCalendar() {
+    renderMonthTitle();
+
+    const grid = document.getElementById("calendar-grid");
+    grid.innerHTML = "";
+
+    const firstDay = new Date(displayedYear, displayedMonth, 1);
+    const firstWeekday = (firstDay.getDay() + 6) % 7;
+    const gridStart = new Date(
+        displayedYear,
+        displayedMonth,
+        1 - firstWeekday
+    );
+
+    for (let index = 0; index < 42; index += 1) {
+        const date = new Date(
+            gridStart.getFullYear(),
+            gridStart.getMonth(),
+            gridStart.getDate() + index
+        );
+
+        const dayEvents = eventsForDate(date);
+        const cell = document.createElement("button");
+
+        cell.type = "button";
+        cell.className = "calendar-day";
+
+        if (
+            date.getMonth() !== displayedMonth
+            || date.getFullYear() !== displayedYear
+        ) {
+            cell.classList.add("calendar-day-outside");
+        }
+
+        if (sameDay(date, now)) {
+            cell.classList.add("calendar-day-today");
+        }
+
+        if (sameDay(date, selectedDate)) {
+            cell.classList.add("calendar-day-selected");
+        }
+
+        const dayNumber = document.createElement("div");
+        dayNumber.className = "calendar-day-number";
+        dayNumber.textContent = date.getDate();
+        cell.appendChild(dayNumber);
+
+        const preview = document.createElement("div");
+        preview.className = "calendar-day-events";
+
+        const previewLimit = 3;
+
+        dayEvents.slice(0, previewLimit).forEach(function (event) {
+            const item = document.createElement("div");
+            item.className =
+                "calendar-day-event " + categoryClass(event.event_type);
+
+            const time = eventDate(event).toLocaleTimeString(
+                undefined,
+                { hour: "2-digit", minute: "2-digit" }
+            );
+
+            item.innerHTML =
+                "<span>" + escapeHtml(time) + "</span>"
+                + escapeHtml(event.event_name);
+
+            preview.appendChild(item);
+        });
+
+        if (dayEvents.length > previewLimit) {
+            const more = document.createElement("div");
+            more.className = "calendar-day-more";
+            more.textContent =
+                "+" + (dayEvents.length - previewLimit) + " more";
+            preview.appendChild(more);
+        }
+
+        cell.appendChild(preview);
+
+        cell.addEventListener("click", function () {
+            selectedDate = startOfDay(date);
+
+            if (
+                date.getMonth() !== displayedMonth
+                || date.getFullYear() !== displayedYear
+            ) {
+                displayedMonth = date.getMonth();
+                displayedYear = date.getFullYear();
+            }
+
+            renderCalendar();
+            renderSelectedDay();
+        });
+
+        grid.appendChild(cell);
+    }
+}
+
+function renderSelectedDay() {
+    document.getElementById("selected-day-title").textContent =
+        selectedDate.toLocaleDateString(
+            undefined,
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    const events = eventsForDate(selectedDate);
+
+    document.getElementById("selected-day-count").textContent =
+        events.length + (events.length === 1 ? " event" : " events");
+
+    const container = document.getElementById("selected-day-events");
+    const empty = document.getElementById("selected-day-empty");
+
+    container.innerHTML = "";
+
+    if (events.length === 0) {
+        empty.hidden = false;
+        return;
+    }
+
+    empty.hidden = true;
+
+    for (const event of events) {
+        const date = eventDate(event);
+        const card = document.createElement("article");
+
+        card.className =
+            "calendar-detail-card " + categoryClass(event.event_type);
+
+        const time = date.toLocaleTimeString(
+            undefined,
+            { hour: "2-digit", minute: "2-digit" }
+        );
+
+        let sourceHtml = "";
+
+        if (event.source) {
+            if (event.source_url) {
+                sourceHtml = `
+                    <div class="event-source">
+                        Source:
+                        <a href="${escapeHtml(event.source_url)}"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            ${escapeHtml(event.source)}
+                        </a>
+                    </div>
+                `;
+            } else {
+                sourceHtml = `
+                    <div class="event-source">
+                        Source: ${escapeHtml(event.source)}
+                    </div>
+                `;
+            }
+        }
+
+        const previous = event.previous || "—";
+        const actual = event.actual || "—";
+        const unit = event.unit || "";
+
+        const hasValueData =
+            previous !== "—"
+            || actual !== "—";
+
+        const valueDataHtml =
+            hasValueData
+            ? `
+                <div class="event-data">
+                    <div>
+                        <span class="event-data-label">PREVIOUS</span>
+                        <strong>
+                            ${escapeHtml(previous)}
+                            ${previous !== "—" ? escapeHtml(unit) : ""}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="event-data-label">ACTUAL</span>
+                        <strong>
+                            ${escapeHtml(actual)}
+                            ${actual !== "—" ? escapeHtml(unit) : ""}
+                        </strong>
+                    </div>
+                </div>
+            `
+            : "";
+
+        card.innerHTML = `
+            <div class="calendar-detail-time">
+                ${escapeHtml(time)}
+            </div>
+
+            <div class="calendar-detail-main">
+                <div class="event-country">UNITED STATES</div>
+
+                <h3>${escapeHtml(event.event_name)}</h3>
+
+                ${
+                    event.event_type
+                    ? `<div class="event-type">${escapeHtml(event.event_type)}</div>`
+                    : ""
+                }
+
+                ${valueDataHtml}
+
+                ${sourceHtml}
+            </div>
+        `;
+
+        container.appendChild(card);
+    }
+}
+
+document.getElementById("previous-month").addEventListener(
+    "click",
+    function () {
+        displayedMonth -= 1;
+
+        if (displayedMonth < 0) {
+            displayedMonth = 11;
+            displayedYear -= 1;
+        }
+
+        selectedDate = new Date(displayedYear, displayedMonth, 1);
+        renderCalendar();
+        renderSelectedDay();
+    }
+);
+
+document.getElementById("next-month").addEventListener(
+    "click",
+    function () {
+        displayedMonth += 1;
+
+        if (displayedMonth > 11) {
+            displayedMonth = 0;
+            displayedYear += 1;
+        }
+
+        selectedDate = new Date(displayedYear, displayedMonth, 1);
+        renderCalendar();
+        renderSelectedDay();
+    }
+);
+
+document.getElementById("calendar-today").addEventListener(
+    "click",
+    function () {
+        const current = new Date();
+        displayedYear = current.getFullYear();
+        displayedMonth = current.getMonth();
+        selectedDate = startOfDay(current);
+        renderCalendar();
+        renderSelectedDay();
+    }
+);
+
+renderTimezone();
+renderCalendar();
+renderSelectedDay();
+</script>
+
+</body>
+</html>
