@@ -296,6 +296,32 @@ CATEGORY_RULES = {
     },
 
 
+    "General Macro & Markets": {
+
+        "threshold": 6,
+
+        "strong": [
+            "economic outlook",
+            "macroeconomic",
+            "global economy",
+            "economic policy",
+            "financial conditions",
+            "market outlook"
+        ],
+
+        "medium": [
+            "economy",
+            "economic",
+            "markets",
+            "market",
+            "growth outlook",
+            "business cycle"
+        ],
+
+        "weak": []
+    },
+
+
     "Economic Theory": {
 
         "threshold": 12,
