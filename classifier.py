@@ -281,7 +281,7 @@ CATEGORY_RULES = {
     },
 
 
-    "Bonds & Markets": {
+    "Fixed Income & Credit": {
 
         "threshold": 8,
 
@@ -316,7 +316,7 @@ CATEGORY_RULES = {
     },
 
 
-    "General Macro & Markets": {
+    "Macro & Markets": {
 
         "threshold": 6,
 

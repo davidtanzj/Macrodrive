@@ -375,7 +375,77 @@ SOURCES = [
         "text_mode": "provided",
         "access_type": "free",
         "enabled": True
+    }
+,
+    # EUROPEAN CENTRAL BANK
+    {
+        "name": "European Central Bank",
+        "type": "rss",
+        "url": "https://www.ecb.europa.eu/rss/press.html",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    },
+    {
+        "name": "European Central Bank",
+        "type": "rss",
+        "url": "https://www.ecb.europa.eu/rss/key.html",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
     },
 
+    # BANK OF ENGLAND
+    {
+        "name": "Bank of England",
+        "type": "rss",
+        "url": "https://www.bankofengland.co.uk/rss/news",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    },
+    {
+        "name": "Bank of England",
+        "type": "rss",
+        "url": "https://www.bankofengland.co.uk/rss/speeches",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    },
+
+    # RESERVE BANK OF AUSTRALIA
+    {
+        "name": "Reserve Bank of Australia",
+        "type": "rss",
+        "url": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    },
+    {
+        "name": "Reserve Bank of Australia",
+        "type": "rss",
+        "url": "https://www.rba.gov.au/rss/rss-cb-speeches.xml",
+        "max_articles": 25,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    },
+
+    # BANK OF CANADA
+    {
+        "name": "Bank of Canada",
+        "type": "rss",
+        "url": "https://www.bankofcanada.ca/feed/",
+        "max_articles": 30,
+        "text_mode": "full",
+        "access_type": "free",
+        "enabled": True
+    }
 
 ]
