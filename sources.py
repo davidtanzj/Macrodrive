@@ -359,20 +359,7 @@ SOURCES = [
 
 
 ,
-    # ========================================================
-    # ECONBROWSER
-    # Macroeconomic data and policy analysis.
-    # ========================================================
 
-    {
-        "name": "Econbrowser",
-        "type": "rss",
-        "url": "https://econbrowser.com/feed",
-        "max_articles": 20,
-        "text_mode": "provided",
-        "access_type": "free",
-        "enabled": True
-    },
 
     # ========================================================
     # MARGINAL REVOLUTION
@@ -390,20 +377,5 @@ SOURCES = [
         "enabled": True
     },
 
-    # ========================================================
-    # CALCULATED RISK
-    # US housing and macroeconomic data analysis.
-    # Some Substack material may have restricted access.
-    # ========================================================
-
-    {
-        "name": "Calculated Risk",
-        "type": "rss",
-        "url": "https://calculatedrisk.substack.com/feed",
-        "max_articles": 20,
-        "text_mode": "provided",
-        "access_type": "unknown",
-        "enabled": True
-    }
 
 ]
