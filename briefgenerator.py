@@ -87,6 +87,15 @@ def build_evidence(report):
                     "source": article["source"],
                     "title": article["title"],
                     "description": article["description"][:500],
+                    "access_type": article["access_type"],
+                    "article_excerpt": (
+                        article["body_text"][:1800]
+                        if (
+                            article["access_type"] == "free"
+                            and article["body_text"]
+                        )
+                        else ""
+                    ),
                 }
                 for article in selected
             ],
@@ -120,6 +129,10 @@ Writing requirements:
 - Distinguish reported developments from expectations.
 - Do not mention that you are an AI.
 - Do not cite or fabricate sources beyond the supplied source names.
+- For stories marked access_type "free", an article_excerpt may be supplied;
+  you may use it as evidence.
+- For paywalled or unknown-access stories, rely only on the supplied title
+  and description. Do not infer details from an inaccessible full article.
 - Headline: concise, informative, no clickbait.
 - Teaser: 35-45 words and useful when shown by itself.
 - Do not intensify language beyond the evidence. Words such as "surge",

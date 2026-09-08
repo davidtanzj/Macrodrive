@@ -55,7 +55,9 @@ def load_recent_articles():
             url,
             published_at,
             description,
-            relevance_score
+            relevance_score,
+            body_text,
+            access_type
         FROM articles
         WHERE macro_relevant = 1
           AND published_at IS NOT NULL
@@ -127,6 +129,8 @@ def load_recent_articles():
             "published_at": published_at,
             "description": row[5] or "",
             "relevance_score": row[6] or 0,
+            "body_text": row[7] or "",
+            "access_type": row[8] or "unknown",
             "topics": topics,
             "regions": regions
         })
