@@ -20,6 +20,10 @@ from flask import (
     request
 )
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from urllib.parse import urlsplit
+
 from database import (
     create_database,
     normalize_existing_dates
@@ -27,6 +31,14 @@ from database import (
 
 
 app = Flask(__name__)
+
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["120 per minute"],
+    storage_uri="memory://"
+)
+
 print(
     "DATABASE BACKEND:",
     "PostgreSQL" if using_postgres() else "SQLite",
@@ -43,6 +55,61 @@ initialize_application_database()
 
 
 DATABASE_NAME = "Macrodrive.db"
+
+
+# ============================================================
+# SECURITY
+# ============================================================
+
+MAX_SEARCH_QUERY_LENGTH = 200
+
+
+def safe_external_url(url):
+    if not url:
+        return ""
+
+    try:
+        parsed = urlsplit(url.strip())
+
+        if parsed.scheme not in ("http", "https"):
+            return ""
+
+        if not parsed.netloc:
+            return ""
+
+        return url.strip()
+
+    except (TypeError, ValueError):
+        return ""
+
+
+@app.after_request
+def add_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=()"
+    )
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data: https:; "
+        "font-src 'self' data:; "
+        "connect-src 'self'; "
+        "object-src 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "frame-ancestors 'none'"
+    )
+
+    if request.is_secure:
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+
+    return response
 
 
 # ============================================================
@@ -312,7 +379,9 @@ def build_article(
             row["title"],
 
         "url":
-            row["url"],
+            safe_external_url(
+                row["url"]
+            ),
 
         "published_at":
             row["published_at"],
@@ -725,13 +794,16 @@ def search_articles(
 # ============================================================
 
 @app.route("/")
+@limiter.limit("30 per minute")
 def home():
 
     search_query = (
         request.args.get(
             "q",
             ""
-        ).strip()
+        ).strip()[
+            :MAX_SEARCH_QUERY_LENGTH
+        ]
     )
 
 
@@ -810,5 +882,5 @@ def calendar_page():
 if __name__ == "__main__":
 
     app.run(
-        debug=True
+        debug=False
     )
