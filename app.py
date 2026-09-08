@@ -839,6 +839,7 @@ def home():
     ) = get_filter_options()
 
     daily_brief = get_latest_daily_brief()
+
     if daily_brief:
         try:
             brief_date = datetime.strptime(
@@ -847,13 +848,15 @@ def home():
             )
 
             daily_brief["display_date"] = (
-                brief_date.strftime("%-d %b %Y")
+                f"{brief_date.day} "
+                f"{brief_date.strftime('%b %Y')}"
             )
 
-        except ValueError:
+        except (ValueError, TypeError):
             daily_brief["display_date"] = (
                 daily_brief["brief_date"]
             )
+
 
     return render_template(
 
