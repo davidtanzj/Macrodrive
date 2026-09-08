@@ -12,6 +12,11 @@ from trendengine import (
     representative_articles,
 )
 
+from database import (
+    create_database,
+    save_daily_brief,
+)
+
 
 MODEL = "gemini-3.6-flash"
 
@@ -116,7 +121,10 @@ Writing requirements:
 - Do not mention that you are an AI.
 - Do not cite or fabricate sources beyond the supplied source names.
 - Headline: concise, informative, no clickbait.
-- Teaser: 40-60 words and useful when shown by itself.
+- Teaser: 35-45 words and useful when shown by itself.
+- Do not intensify language beyond the evidence. Words such as "surge",
+  "plunge", "soar", "collapse", "sharp" or "dramatic" may only be used
+  when the supplied headline or description explicitly supports them.
 - Sections: exactly 3, corresponding in order to the 3 trending topics.
 - Each section: roughly 80-120 words.
 - what_to_watch: 2-4 short items. These must come from the supplied
@@ -234,6 +242,56 @@ def generate_brief():
     return result, evidence
 
 
+def save_generated_brief():
+    create_database()
+
+    result, evidence = generate_brief()
+
+    generated_at = (
+        __import__("datetime")
+        .datetime.now(
+            __import__("datetime").timezone.utc
+        )
+    )
+
+    payload = {
+        "brief_date": generated_at.date().isoformat(),
+        "headline": result.headline,
+        "teaser": result.teaser,
+        "sections": [
+            {
+                "title": section.title,
+                "text": section.text,
+            }
+            for section in result.sections
+        ],
+        "what_to_watch": list(result.what_to_watch),
+        "trending_topics": [
+            topic["name"]
+            for topic in evidence["top_topics"]
+        ],
+        "trending_regions": [
+            region["name"]
+            for region in evidence["top_regions"]
+        ],
+        "articles_analyzed": evidence["articles_analyzed"],
+        "sources_analyzed": evidence["distinct_sources"],
+        "generated_at": generated_at.isoformat(),
+    }
+
+    save_daily_brief(payload)
+
+    print(
+        f"Saved MacroDrive Daily Brief for "
+        f"{payload['brief_date']}",
+        flush=True,
+    )
+
+    print()
+    print(payload["headline"])
+    print(payload["teaser"])
+
+
 def print_brief():
     result, evidence = generate_brief()
 
@@ -283,4 +341,9 @@ def print_brief():
 
 
 if __name__ == "__main__":
-    print_brief()
+    import sys
+
+    if "--save" in sys.argv:
+        save_generated_brief()
+    else:
+        print_brief()

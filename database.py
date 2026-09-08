@@ -1,3 +1,4 @@
+import json
 import sqlite3
 from db import connect_database
 
@@ -190,6 +191,38 @@ def create_database():
                 article_id,
                 region_id
             )
+        )
+    """)
+
+
+    # ========================================================
+    # DAILY AI MARKET BRIEFS
+    # ========================================================
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS daily_briefs (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            brief_date TEXT NOT NULL UNIQUE,
+
+            headline TEXT NOT NULL,
+
+            teaser TEXT NOT NULL,
+
+            sections_json TEXT NOT NULL,
+
+            what_to_watch_json TEXT NOT NULL,
+
+            trending_topics_json TEXT NOT NULL,
+
+            trending_regions_json TEXT NOT NULL,
+
+            articles_analyzed INTEGER NOT NULL DEFAULT 0,
+
+            sources_analyzed INTEGER NOT NULL DEFAULT 0,
+
+            generated_at TEXT NOT NULL
         )
     """)
 
@@ -876,3 +909,94 @@ def clear_regions():
     connection.commit()
 
     connection.close()
+
+# ============================================================
+# DAILY BRIEF FUNCTIONS
+# ============================================================
+
+def save_daily_brief(brief):
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO daily_briefs (
+            brief_date,
+            headline,
+            teaser,
+            sections_json,
+            what_to_watch_json,
+            trending_topics_json,
+            trending_regions_json,
+            articles_analyzed,
+            sources_analyzed,
+            generated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
+        ON CONFLICT (brief_date)
+        DO UPDATE SET
+            headline = excluded.headline,
+            teaser = excluded.teaser,
+            sections_json = excluded.sections_json,
+            what_to_watch_json = excluded.what_to_watch_json,
+            trending_topics_json = excluded.trending_topics_json,
+            trending_regions_json = excluded.trending_regions_json,
+            articles_analyzed = excluded.articles_analyzed,
+            sources_analyzed = excluded.sources_analyzed,
+            generated_at = excluded.generated_at
+    """, (
+        brief["brief_date"],
+        brief["headline"],
+        brief["teaser"],
+        json.dumps(brief["sections"], ensure_ascii=False),
+        json.dumps(brief["what_to_watch"], ensure_ascii=False),
+        json.dumps(brief["trending_topics"], ensure_ascii=False),
+        json.dumps(brief["trending_regions"], ensure_ascii=False),
+        brief["articles_analyzed"],
+        brief["sources_analyzed"],
+        brief["generated_at"],
+    ))
+
+    connection.commit()
+    connection.close()
+
+
+def get_latest_daily_brief():
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            brief_date,
+            headline,
+            teaser,
+            sections_json,
+            what_to_watch_json,
+            trending_topics_json,
+            trending_regions_json,
+            articles_analyzed,
+            sources_analyzed,
+            generated_at
+        FROM daily_briefs
+        ORDER BY brief_date DESC, generated_at DESC
+        LIMIT 1
+    """)
+
+    row = cursor.fetchone()
+    connection.close()
+
+    if not row:
+        return None
+
+    return {
+        "brief_date": row[0],
+        "headline": row[1],
+        "teaser": row[2],
+        "sections": json.loads(row[3]),
+        "what_to_watch": json.loads(row[4]),
+        "trending_topics": json.loads(row[5]),
+        "trending_regions": json.loads(row[6]),
+        "articles_analyzed": row[7],
+        "sources_analyzed": row[8],
+        "generated_at": row[9],
+    }

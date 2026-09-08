@@ -96,6 +96,102 @@
 
 
     <!-- ================================================== -->
+    <!-- DAILY MARKET BRIEF -->
+    <!-- ================================================== -->
+
+    {% if daily_brief and not search_mode %}
+
+        <section class="daily-brief">
+
+            <div class="daily-brief-top">
+
+                <div>
+                    <p class="eyebrow">MACRODRIVE DAILY BRIEF</p>
+                    <h2>{{ daily_brief.headline }}</h2>
+                </div>
+
+                <span class="daily-brief-date">
+                    {{ daily_brief.brief_date }}
+                </span>
+
+            </div>
+
+            <p class="daily-brief-teaser">
+                {{ daily_brief.teaser }}
+            </p>
+
+            <div class="daily-brief-topics">
+
+                {% for topic in daily_brief.trending_topics %}
+                    <span
+                        class="topic-tag"
+                        data-topic="{{ topic }}"
+                    >
+                        {{ topic }}
+                    </span>
+                {% endfor %}
+
+            </div>
+
+            <div
+                class="daily-brief-expanded"
+                id="daily-brief-expanded"
+                hidden
+            >
+
+                {% for section in daily_brief.sections %}
+
+                    <div class="daily-brief-section">
+                        <h3>{{ section.title }}</h3>
+                        <p>{{ section.text }}</p>
+                    </div>
+
+                {% endfor %}
+
+                {% if daily_brief.what_to_watch %}
+
+                    <div class="daily-brief-watch">
+                        <h3>What to Watch</h3>
+
+                        <ul>
+                            {% for item in daily_brief.what_to_watch %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            <div class="daily-brief-footer">
+
+                <span>
+                    AI-generated · Based on
+                    {{ daily_brief.articles_analyzed }}
+                    macro-relevant articles from
+                    {{ daily_brief.sources_analyzed }}
+                    sources over the last 24 hours
+                </span>
+
+                <button
+                    type="button"
+                    class="daily-brief-toggle"
+                    id="daily-brief-toggle"
+                    aria-expanded="false"
+                    aria-controls="daily-brief-expanded"
+                >
+                    Read full brief ↓
+                </button>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- ================================================== -->
     <!-- SEARCH -->
     <!-- ================================================== -->
 
@@ -584,6 +680,50 @@
 <!-- ====================================================== -->
 
 <script>
+
+
+const dailyBriefToggle =
+    document.getElementById(
+        "daily-brief-toggle"
+    );
+
+const dailyBriefExpanded =
+    document.getElementById(
+        "daily-brief-expanded"
+    );
+
+if (
+    dailyBriefToggle
+    && dailyBriefExpanded
+) {
+    dailyBriefToggle.addEventListener(
+        "click",
+        function () {
+
+            const isExpanded =
+                dailyBriefToggle
+                    .getAttribute(
+                        "aria-expanded"
+                    )
+                === "true";
+
+            dailyBriefToggle.setAttribute(
+                "aria-expanded",
+                String(!isExpanded)
+            );
+
+            dailyBriefExpanded.hidden =
+                isExpanded;
+
+            dailyBriefToggle.textContent =
+                isExpanded
+                    ? "Read full brief ↓"
+                    : "Collapse ↑";
+        }
+    );
+}
+
+
 
 
 const pageData =

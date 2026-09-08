@@ -26,7 +26,8 @@ from urllib.parse import urlsplit
 
 from database import (
     create_database,
-    normalize_existing_dates
+    normalize_existing_dates,
+    get_latest_daily_brief
 )
 
 
@@ -837,6 +838,8 @@ def home():
         sources
     ) = get_filter_options()
 
+    daily_brief = get_latest_daily_brief()
+
 
     return render_template(
 
@@ -852,7 +855,9 @@ def home():
 
         search_query=search_query,
 
-        search_mode=search_mode
+        search_mode=search_mode,
+
+        daily_brief=daily_brief
     )
 
 # ============================================================
