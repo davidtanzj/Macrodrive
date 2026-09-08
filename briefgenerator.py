@@ -1,7 +1,9 @@
 import json
 import os
+import time
 
 from google import genai
+from google.genai import errors
 from google.genai import types
 from pydantic import BaseModel, Field
 
@@ -11,7 +13,7 @@ from trendengine import (
 )
 
 
-MODEL = "gemini-3.6-flash"
+MODEL = "gemini-2.5-flash"
 
 
 class BriefSection(BaseModel):
@@ -152,16 +154,72 @@ def generate_brief():
         api_key=api_key
     )
 
-    response = client.models.generate_content(
-        model=MODEL,
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=DailyBrief,
-            temperature=0.2,
-            max_output_tokens=1400,
-        ),
-    )
+    retry_delays = [0, 20, 60]
+
+    response = None
+
+    for attempt, delay in enumerate(
+        retry_delays,
+        start=1
+    ):
+        if delay:
+            print(
+                f"Gemini temporarily unavailable. "
+                f"Waiting {delay} seconds before "
+                f"attempt {attempt}...",
+                flush=True,
+            )
+            time.sleep(delay)
+
+        try:
+            response = client.models.generate_content(
+                model=MODEL,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=DailyBrief,
+                    temperature=0.2,
+                    max_output_tokens=1400,
+                ),
+            )
+            break
+
+        except (errors.ClientError, errors.ServerError) as error:
+            status_code = getattr(
+                error,
+                "code",
+                None,
+            )
+
+            if status_code is None:
+                status_code = getattr(
+                    error,
+                    "status_code",
+                    None,
+                )
+
+            retryable = (
+                status_code in (429, 500, 502, 503, 504)
+                or "503" in str(error)
+                or "429" in str(error)
+            )
+
+            if (
+                not retryable
+                or attempt == len(retry_delays)
+            ):
+                raise
+
+            print(
+                f"Gemini request attempt {attempt} "
+                f"failed temporarily: {error}",
+                flush=True,
+            )
+
+    if response is None:
+        raise RuntimeError(
+            "Gemini did not return a response."
+        )
 
     if response.parsed is not None:
         result = response.parsed
