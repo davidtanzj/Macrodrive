@@ -216,9 +216,16 @@ def build_rankings(articles, now):
                 8
             ) * 0.12
 
+            specificity_factor = (
+                0.80
+                if name == "Macro & Markets"
+                else 1.00
+            )
+
             final_score = (
                 item["raw_score"]
                 * diversity_bonus
+                * specificity_factor
             )
 
             results.append({
@@ -246,10 +253,20 @@ def build_rankings(articles, now):
     )
 
 
-def representative_articles(topic, now):
+def representative_articles(
+    topic,
+    now,
+    excluded_article_ids=None
+):
+    if excluded_article_ids is None:
+        excluded_article_ids = set()
+
     ranked = []
 
     for article in topic["articles"]:
+        if article["id"] in excluded_article_ids:
+            continue
+
         recency = recency_weight(
             article["published_at"],
             now
@@ -260,9 +277,19 @@ def representative_articles(topic, now):
             30
         )
 
+        topic_score = 0
+
+        for article_topic in article["topics"]:
+            if article_topic["name"] == topic["name"]:
+                topic_score = article_topic["score"]
+                break
+
+        # Topic strength is the main representative-story signal.
+        # Overall relevance and recency act as secondary signals.
         score = (
-            recency
-            * (1.0 + relevance / 30.0)
+            (1.0 + min(max(topic_score, 0), 60) / 20.0)
+            * (1.0 + relevance / 60.0)
+            * (0.70 + 0.30 * recency)
         )
 
         ranked.append(
@@ -277,7 +304,7 @@ def representative_articles(topic, now):
     selected = []
     used_sources = set()
 
-    # First pass prioritizes source diversity.
+    # First pass: strong topic representation + source diversity.
     for _, article in ranked:
         if article["source"] in used_sources:
             continue
@@ -288,7 +315,7 @@ def representative_articles(topic, now):
         if len(selected) >= REPRESENTATIVE_ARTICLES_PER_TOPIC:
             return selected
 
-    # Fill remaining slots if the trend has fewer distinct sources.
+    # Second pass: fill remaining slots if necessary.
     selected_ids = {
         article["id"]
         for article in selected
@@ -393,6 +420,7 @@ def print_report():
     print("=" * 72)
 
     now = report["generated_at"]
+    used_article_ids = set()
 
     for topic in report["topics"]:
         print()
@@ -401,7 +429,13 @@ def print_report():
 
         selected = representative_articles(
             topic,
-            now
+            now,
+            excluded_article_ids=used_article_ids
+        )
+
+        used_article_ids.update(
+            article["id"]
+            for article in selected
         )
 
         for article in selected:
