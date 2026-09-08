@@ -179,7 +179,10 @@ def generate_brief():
                     response_mime_type="application/json",
                     response_schema=DailyBrief,
                     temperature=0.2,
-                    max_output_tokens=1400,
+                    max_output_tokens=4096,
+                    thinkin_config=types.ThinkingConfig(
+                        thinking_budget=512
+                    )
                 ),
             )
             break
