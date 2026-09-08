@@ -840,20 +840,20 @@ def home():
 
     daily_brief = get_latest_daily_brief()
     if daily_brief:
-    try:
-        brief_date = datetime.strptime(
-            daily_brief["brief_date"],
-            "%Y-%m-%d"
-        )
+        try:
+            brief_date = datetime.strptime(
+                daily_brief["brief_date"],
+                "%Y-%m-%d"
+            )
 
-        daily_brief["display_date"] = (
-            brief_date.strftime("%-d %b %Y")
-        )
+            daily_brief["display_date"] = (
+                brief_date.strftime("%-d %b %Y")
+            )
 
-    except ValueError:
-        daily_brief["display_date"] = (
-            daily_brief["brief_date"]
-        )
+        except ValueError:
+            daily_brief["display_date"] = (
+                daily_brief["brief_date"]
+            )
 
     return render_template(
 
