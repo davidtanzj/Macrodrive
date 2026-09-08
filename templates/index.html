@@ -103,11 +103,16 @@
 
         <section class="daily-brief">
 
-            <div class="daily-brief-top">
+            <div class="daily-brief-banner">
 
                 <div>
-                    <p class="eyebrow">MACRODRIVE DAILY BRIEF</p>
-                    <h2>{{ daily_brief.headline }}</h2>
+                    <div class="daily-brief-brand">
+                        MACRODRIVE DAILY BRIEF
+                    </div>
+
+                    <div class="daily-brief-subtitle">
+                        Daily synthesis of the last 24 hours in global macro
+                    </div>
                 </div>
 
                 <span class="daily-brief-date">
@@ -116,73 +121,80 @@
 
             </div>
 
-            <p class="daily-brief-teaser">
-                {{ daily_brief.teaser }}
-            </p>
+            <div class="daily-brief-body">
 
-            <div class="daily-brief-topics">
+                <h2 class="daily-brief-headline">
+                    {{ daily_brief.headline }}
+                </h2>
 
-                {% for topic in daily_brief.trending_topics %}
-                    <span
-                        class="topic-tag"
-                        data-topic="{{ topic }}"
-                    >
-                        {{ topic }}
-                    </span>
-                {% endfor %}
+                <p class="daily-brief-teaser">
+                    {{ daily_brief.teaser }}
+                </p>
 
-            </div>
+                <div class="daily-brief-topics">
 
-            <div
-                class="daily-brief-expanded"
-                id="daily-brief-expanded"
-                hidden
-            >
+                    {% for topic in daily_brief.trending_topics %}
+                        <span
+                            class="topic-tag"
+                            data-topic="{{ topic }}"
+                        >
+                            {{ topic }}
+                        </span>
+                    {% endfor %}
 
-                {% for section in daily_brief.sections %}
+                </div>
 
-                    <div class="daily-brief-section">
-                        <h3>{{ section.title }}</h3>
-                        <p>{{ section.text }}</p>
-                    </div>
-
-                {% endfor %}
-
-                {% if daily_brief.what_to_watch %}
-
-                    <div class="daily-brief-watch">
-                        <h3>What to Watch</h3>
-
-                        <ul>
-                            {% for item in daily_brief.what_to_watch %}
-                                <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-            <div class="daily-brief-footer">
-
-                <span>
-                    AI-generated · Based on
-                    {{ daily_brief.articles_analyzed }}
-                    macro-relevant articles from
-                    {{ daily_brief.sources_analyzed }}
-                    sources over the last 24 hours
-                </span>
-
-                <button
-                    type="button"
-                    class="daily-brief-toggle"
-                    id="daily-brief-toggle"
-                    aria-expanded="false"
-                    aria-controls="daily-brief-expanded"
+                <div
+                    class="daily-brief-expanded"
+                    id="daily-brief-expanded"
+                    hidden
                 >
-                    Read full brief ↓
-                </button>
+
+                    {% for section in daily_brief.sections %}
+
+                        <div class="daily-brief-section">
+                            <h3>{{ section.title }}</h3>
+                            <p>{{ section.text }}</p>
+                        </div>
+
+                    {% endfor %}
+
+                    {% if daily_brief.what_to_watch %}
+
+                        <div class="daily-brief-watch">
+                            <h3>What to Watch</h3>
+
+                            <ul>
+                                {% for item in daily_brief.what_to_watch %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="daily-brief-footer">
+
+                    <span class="daily-brief-disclosure">
+                        AI-generated synthesis ·
+                        {{ daily_brief.articles_analyzed }} articles ·
+                        {{ daily_brief.sources_analyzed }} sources ·
+                        Last 24 hours
+                    </span>
+
+                    <button
+                        type="button"
+                        class="daily-brief-toggle"
+                        id="daily-brief-toggle"
+                        aria-expanded="false"
+                        aria-controls="daily-brief-expanded"
+                    >
+                        Read full brief ↓
+                    </button>
+
+                </div>
 
             </div>
 
