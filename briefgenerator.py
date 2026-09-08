@@ -180,7 +180,7 @@ def generate_brief():
                     response_schema=DailyBrief,
                     temperature=0.2,
                     max_output_tokens=4096,
-                    thinkin_config=types.ThinkingConfig(
+                    thinking_config=types.ThinkingConfig(
                         thinking_budget=512
                     )
                 ),
