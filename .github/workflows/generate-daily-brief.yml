@@ -2,8 +2,6 @@ name: Generate MacroDrive Daily Brief
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "10 0 * * *"
 
 jobs:
   daily-brief:
