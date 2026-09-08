@@ -282,12 +282,12 @@ a { color: inherit; }
 
 .daily-brief-toggle {
     flex-shrink: 0;
-    padding: 7px 0;
+    padding: 9px 4px;
     border: 0;
     background: transparent;
     color: #244f73;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 25px;
     font-weight: 800;
     cursor: pointer;
 }
