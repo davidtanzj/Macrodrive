@@ -183,7 +183,7 @@ a { color: inherit; }
 .daily-brief-date {
     flex-shrink: 0;
     color: #c4ccd3;
-    font-size: 11px;
+    font-size: 30px;
 }
 
 .daily-brief-body {
