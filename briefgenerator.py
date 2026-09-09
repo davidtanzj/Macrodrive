@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from zoneinfo import ZoneInfo
 
 from google import genai
 from google.genai import errors
@@ -260,15 +261,20 @@ def save_generated_brief():
 
     result, evidence = generate_brief()
 
+    datetime_module = __import__("datetime")
+
     generated_at = (
-        __import__("datetime")
-        .datetime.now(
-            __import__("datetime").timezone.utc
+        datetime_module.datetime.now(
+            datetime_module.timezone.utc
         )
     )
 
+    singapore_now = generated_at.astimezone(
+        ZoneInfo("Asia/Singapore")
+    )
+
     payload = {
-        "brief_date": generated_at.date().isoformat(),
+        "brief_date": singapore_now.date().isoformat(),
         "headline": result.headline,
         "teaser": result.teaser,
         "sections": [
