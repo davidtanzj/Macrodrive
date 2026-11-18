@@ -5,6 +5,8 @@ from macrocalendar import (
 )
 
 import sqlite3
+import threading
+
 from db import connect_database, using_postgres
 import re
 
@@ -52,7 +54,32 @@ def initialize_application_database():
     normalize_existing_dates()
 
 
-initialize_application_database()
+def _start_background_database_init():
+    """Run DB setup off the import path so the worker can serve immediately.
+
+    gunicorn binds the port before the worker imports this module, but the
+    worker cannot answer HTTP until the import returns. Running the database
+    initialization on a background thread keeps startup near-instant, so
+    Render's port scan finds a listening HTTP port instead of timing out.
+    """
+    import traceback
+
+    def _run():
+        try:
+            initialize_application_database()
+            print("BACKGROUND DATABASE INIT: complete", flush=True)
+        except Exception:
+            print("BACKGROUND DATABASE INIT: failed", flush=True)
+            traceback.print_exc()
+
+    threading.Thread(
+        target=_run,
+        name="macrodrive-db-init",
+        daemon=True,
+    ).start()
+
+
+_start_background_database_init()
 
 
 DATABASE_NAME = "Macrodrive.db"
