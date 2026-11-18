@@ -1,0 +1,307 @@
+# MacroDrive central bank meeting schedule.
+#
+# Version-controlled source of truth for central bank policy-meeting dates.
+# To update for a new year, add new `events` entries (or a new year block)
+# and commit. The loader converts each local `time` to UTC and only surfaces
+# events whose scheduled_at is in the future.
+#
+# Dates below are transcribed from each bank's official published schedule
+# (see `source_url`). Spot-check them against the source before relying on
+# them; a few banks (e.g. BoT, Riksbank) publish partial/rolling schedules.
+
+version: 1
+
+banks:
+  - code: BOE
+    name: Bank of England
+    country: United Kingdom
+    region: Europe
+    timezone: Europe/London
+    time: "12:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates
+    events:
+      - { name: "Bank of England Rate Decision", date: "2026-02-05", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-03-19", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-04-30", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-06-18", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-07-30", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-09-17", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-11-05", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2026-12-17", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-02-04", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-03-18", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-04-29", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-06-17", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-07-29", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-09-16", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-11-04", importance: 3 }
+      - { name: "Bank of England Rate Decision", date: "2027-12-16", importance: 3 }
+
+  - code: BOJ
+    name: Bank of Japan
+    country: Japan
+    region: Asia
+    timezone: Asia/Tokyo
+    time: "12:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm
+    events:
+      - { name: "Bank of Japan Rate Decision", date: "2026-01-23", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-03-19", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-04-28", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-06-16", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-07-31", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-09-18", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-10-30", importance: 3 }
+      - { name: "Bank of Japan Rate Decision", date: "2026-12-18", importance: 3 }
+
+  - code: SNB
+    name: Swiss National Bank
+    country: Switzerland
+    region: Europe
+    timezone: Europe/Zurich
+    time: "09:30"
+    event_type: Central Banking & Rates
+    source_url: https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/decisions
+    events:
+      - { name: "SNB Monetary Policy Assessment", date: "2026-03-19", importance: 3 }
+      - { name: "SNB Monetary Policy Assessment", date: "2026-06-18", importance: 3 }
+      - { name: "SNB Monetary Policy Assessment", date: "2026-09-24", importance: 3 }
+      - { name: "SNB Monetary Policy Assessment", date: "2026-12-10", importance: 3 }
+
+  - code: BOC
+    name: Bank of Canada
+    country: Canada
+    region: North America
+    timezone: America/Toronto
+    time: "09:45"
+    event_type: Central Banking & Rates
+    source_url: https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/
+    events:
+      - { name: "Bank of Canada Rate Decision", date: "2026-01-28", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-03-18", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-04-29", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-06-10", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-07-15", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-09-02", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-10-28", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2026-12-09", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-01-27", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-03-03", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-04-28", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-06-02", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-07-21", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-09-08", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-10-27", importance: 3 }
+      - { name: "Bank of Canada Rate Decision", date: "2027-12-08", importance: 3 }
+
+  - code: RBA
+    name: Reserve Bank of Australia
+    country: Australia
+    region: Australia & New Zealand
+    timezone: Australia/Sydney
+    time: "14:30"
+    event_type: Central Banking & Rates
+    source_url: https://www.rba.gov.au/monetary-policy/rba-board-minutes/
+    events:
+      - { name: "RBA Rate Decision", date: "2026-02-03", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-03-17", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-05-05", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-06-16", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-08-11", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-09-29", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-11-03", importance: 3 }
+      - { name: "RBA Rate Decision", date: "2026-12-08", importance: 3 }
+
+  - code: RBNZ
+    name: Reserve Bank of New Zealand
+    country: New Zealand
+    region: Australia & New Zealand
+    timezone: Pacific/Auckland
+    time: "14:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.rbnz.govt.nz/monetary-policy/monetary-policy-decisions
+    events:
+      - { name: "RBNZ Rate Decision", date: "2026-02-18", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-04-08", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-05-27", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-07-08", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-09-02", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-10-28", importance: 3 }
+      - { name: "RBNZ Rate Decision", date: "2026-12-09", importance: 3 }
+
+  - code: NORGES
+    name: Norges Bank
+    country: Norway
+    region: Europe
+    timezone: Europe/Oslo
+    time: "10:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.norges-bank.no/en/topics/monetary-policy/Monetary-policy-meetings/
+    events:
+      - { name: "Norges Bank Rate Decision", date: "2026-01-21", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-03-25", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-05-06", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-06-17", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-08-12", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-09-23", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-11-04", importance: 3 }
+      - { name: "Norges Bank Rate Decision", date: "2026-12-17", importance: 3 }
+
+  - code: RIKSBANK
+    name: Riksbank
+    country: Sweden
+    region: Europe
+    timezone: Europe/Stockholm
+    time: "09:30"
+    event_type: Central Banking & Rates
+    source_url: https://www.riksbank.se/en-gb/press-and-published/calendar/calendar-2026/
+    events:
+      - { name: "Riksbank Rate Decision", date: "2026-01-29", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-05-07", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-06-17", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-08-20", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-09-24", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-11-04", importance: 3 }
+      - { name: "Riksbank Rate Decision", date: "2026-12-16", importance: 3 }
+
+  - code: RBI
+    name: Reserve Bank of India
+    country: India
+    region: Asia
+    timezone: Asia/Kolkata
+    time: "10:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.rbi.org.in/Scripts/BS_ViewMonetaryPolicy.aspx
+    events:
+      - { name: "RBI Rate Decision", date: "2026-04-08", importance: 3 }
+      - { name: "RBI Rate Decision", date: "2026-06-05", importance: 3 }
+      - { name: "RBI Rate Decision", date: "2026-08-05", importance: 3 }
+      - { name: "RBI Rate Decision", date: "2026-10-07", importance: 3 }
+      - { name: "RBI Rate Decision", date: "2026-12-04", importance: 3 }
+      - { name: "RBI Rate Decision", date: "2027-02-05", importance: 3 }
+
+  - code: BOK
+    name: Bank of Korea
+    country: South Korea
+    region: Asia
+    timezone: Asia/Seoul
+    time: "10:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bok.or.kr/eng/main/main.do
+    events:
+      - { name: "Bank of Korea Rate Decision", date: "2026-01-15", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-02-26", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-04-10", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-05-28", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-07-16", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-08-27", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-10-22", importance: 3 }
+      - { name: "Bank of Korea Rate Decision", date: "2026-11-26", importance: 3 }
+
+  - code: BI
+    name: Bank Indonesia
+    country: Indonesia
+    region: Asia
+    timezone: Asia/Jakarta
+    time: "15:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bi.go.id/en/rupiah/bi-7day-rr/Default.aspx
+    events:
+      - { name: "Bank Indonesia Rate Decision", date: "2026-01-21", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-02-19", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-03-17", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-04-22", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-05-20", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-06-18", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-07-22", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-08-19", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-09-23", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-10-21", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-11-18", importance: 3 }
+      - { name: "Bank Indonesia Rate Decision", date: "2026-12-16", importance: 3 }
+
+  - code: BSP
+    name: Bangko Sentral ng Pilipinas
+    country: Philippines
+    region: Asia
+    timezone: Asia/Manila
+    time: "15:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bsp.gov.ph/Pages/PriceStability/ScheduleOfMeetingsOfTheAdvisoryCommitteeAndMonetaryBoardOnMonetaryPolicy.aspx
+    events:
+      - { name: "BSP Rate Decision", date: "2026-02-19", importance: 3 }
+      - { name: "BSP Rate Decision", date: "2026-04-23", importance: 3 }
+      - { name: "BSP Rate Decision", date: "2026-06-18", importance: 3 }
+      - { name: "BSP Rate Decision", date: "2026-08-27", importance: 3 }
+      - { name: "BSP Rate Decision", date: "2026-10-22", importance: 3 }
+      - { name: "BSP Rate Decision", date: "2026-12-17", importance: 3 }
+
+  - code: BOT
+    name: Bank of Thailand
+    country: Thailand
+    region: Asia
+    timezone: Asia/Bangkok
+    time: "14:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bot.or.th/en/our-roles/monetary-policy/monetary-policy-committee.html
+    events:
+      - { name: "Bank of Thailand Rate Decision", date: "2026-04-29", importance: 3 }
+      - { name: "Bank of Thailand Rate Decision", date: "2026-06-24", importance: 3 }
+      - { name: "Bank of Thailand Rate Decision", date: "2026-08-26", importance: 3 }
+      - { name: "Bank of Thailand Rate Decision", date: "2026-10-28", importance: 3 }
+      - { name: "Bank of Thailand Rate Decision", date: "2026-12-23", importance: 3 }
+
+  - code: BNM
+    name: Bank Negara Malaysia
+    country: Malaysia
+    region: Asia
+    timezone: Asia/Kuala_Lumpur
+    time: "15:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.bnm.gov.my/monetary-stability/mpc-meetings
+    events:
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-01-22", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-03-05", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-05-07", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-07-09", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-09-03", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2026-11-05", importance: 3 }
+      - { name: "Bank Negara Malaysia Rate Decision", date: "2027-01-21", importance: 3 }
+
+  - code: PBOC
+    name: People's Bank of China
+    country: China
+    region: Asia
+    timezone: Asia/Shanghai
+    time: "09:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.pbc.gov.cn/en/3688247/3688978/index.html
+    events:
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-01-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-02-24", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-03-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-04-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-05-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-06-22", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-07-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-08-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-09-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-10-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-11-20", importance: 2 }
+      - { name: "PBoC Loan Prime Rate (LPR) Fixing", date: "2026-12-21", importance: 2 }
+
+  - code: MAS
+    name: Monetary Authority of Singapore
+    country: Singapore
+    region: Asia
+    timezone: Asia/Singapore
+    time: "08:00"
+    event_type: Central Banking & Rates
+    source_url: https://www.mas.gov.sg/monetary-policy
+    events:
+      - { name: "MAS Monetary Policy Statement", date: "2026-01-29", importance: 3 }
+      - { name: "MAS Monetary Policy Statement", date: "2026-04-14", importance: 3 }
+      - { name: "MAS Monetary Policy Statement", date: "2026-07-27", importance: 3 }
+      - { name: "MAS Monetary Policy Statement", date: "2026-10-14", importance: 3 }

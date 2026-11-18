@@ -6,12 +6,14 @@ from macrocalendar import (
 from collectors import (
     uscalendar,
     eurozonecalendar,
+    centralbanks,
 )
 
 
 COLLECTORS = [
     ("United States", uscalendar),
     ("Eurozone", eurozonecalendar),
+    ("Central Banks", centralbanks),
 ]
 
 

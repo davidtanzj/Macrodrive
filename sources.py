@@ -428,6 +428,94 @@ SOURCES = [
         "text_mode": "full",
         "access_type": "free",
         "enabled": True
+    },
+
+    # ========================================================
+    # ASIA — NEWS SOURCES
+    # The `region` key is reference metadata only; article region
+    # tagging is done at runtime by regiondetector.py (content-based).
+    # ========================================================
+
+    # Nikkei Asia — hard paywall, metadata only.
+    {
+        "name": "Nikkei Asia",
+        "type": "rss",
+        "url": "https://asia.nikkei.com/rss/feed/nar",
+        "max_articles": 20,
+        "text_mode": "metadata_only",
+        "access_type": "paywalled",
+        "region": "Asia",
+        "enabled": True
+    },
+
+    # Mint (India) — free, full text.
+    {
+        "name": "Mint",
+        "type": "rss",
+        "url": "https://www.livemint.com/rss/markets",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "unknown",
+        "region": "Asia",
+        "enabled": True
+    },
+    {
+        "name": "Mint",
+        "type": "rss",
+        "url": "https://www.livemint.com/rss/money",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "unknown",
+        "region": "Asia",
+        "enabled": True
+    },
+
+    # Economic Times (India) — economy, free, full text.
+    {
+        "name": "Economic Times",
+        "type": "rss",
+        "url": "https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "unknown",
+        "region": "Asia",
+        "enabled": True
+    },
+
+    # Yonhap (South Korea) — economy & finance, free, full text.
+    {
+        "name": "Yonhap",
+        "type": "rss",
+        "url": "https://en.yna.co.kr/RSS/economy-finance.xml",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "unknown",
+        "region": "Asia",
+        "enabled": True
+    },
+
+    # Bank of Japan — official press releases, free.
+    {
+        "name": "Bank of Japan",
+        "type": "rss",
+        "url": "https://www.boj.or.jp/en/rss/whatsnew.xml",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "free",
+        "region": "Asia",
+        "enabled": True
+    },
+
+    # Reserve Bank of India — official press releases, free.
+    {
+        "name": "Reserve Bank of India",
+        "type": "rss",
+        "url": "https://www.rbi.org.in/pressreleases_rss.xml",
+        "max_articles": 20,
+        "text_mode": "full",
+        "access_type": "free",
+        "region": "Asia",
+        "enabled": True
     }
 
 ]

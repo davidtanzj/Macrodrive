@@ -35,14 +35,14 @@
 
 <main class="container">
     <section class="hero calendar-hero">
-        <h1>Key US economic events</h1>
+        <h1>Key global economic events</h1>
         <p class="hero-description">
-            Track major US economic releases and Federal Reserve events in your local time.
+            Track central bank rate decisions and key economic releases in your local time.
         </p>
     </section>
 
     <section class="calendar-legend" aria-label="Calendar categories">
-        <span class="legend-item category-rates">Fed / Rates</span>
+        <span class="legend-item category-rates">Central Banks / Rates</span>
         <span class="legend-item category-inflation">Inflation</span>
         <span class="legend-item category-labor">Labor</span>
         <span class="legend-item category-growth">Growth</span>
@@ -86,7 +86,7 @@
 
         <div class="empty-state calendar-day-empty" id="selected-day-empty" hidden>
             <h3>No economic events</h3>
-            <p>There are no US macro events scheduled for this date.</p>
+            <p>There are no economic events scheduled for this date.</p>
         </div>
     </section>
 </main>
@@ -425,7 +425,7 @@ function renderSelectedDay() {
             </div>
 
             <div class="calendar-detail-main">
-                <div class="event-country">UNITED STATES</div>
+                <div class="event-country">${escapeHtml((event.country || "").toUpperCase())}</div>
 
                 <h3>${escapeHtml(event.event_name)}</h3>
 
