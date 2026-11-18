@@ -373,8 +373,14 @@ def build_article(
     )
 
 
+    # body_text is deliberately not selected by the browse query (it is the
+    # bulk of the article row and is never rendered, only used to compute the
+    # unused can_summarize flag). The search query still selects it, so fall
+    # back to an empty string when it is absent.
     body_text = (
         row["body_text"] or ""
+        if "body_text" in row.keys()
+        else ""
     )
 
 
@@ -482,7 +488,6 @@ def get_browse_articles():
             published,
             published_at,
             description,
-            body_text,
             access_type
 
         FROM articles
