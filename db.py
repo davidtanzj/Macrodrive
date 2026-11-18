@@ -7,6 +7,15 @@ import time
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 SQLITE_DATABASE = os.getenv("SQLITE_DATABASE", "Macrodrive.db")
 
+# Pre-import the psycopg2 submodules on the main thread at module load, rather
+# than lazily inside functions. The lazy imports race on Python's per-module
+# import lock when the background database-init thread and the first request
+# handler both call connect_database() concurrently, which hangs the request
+# long enough to trip gunicorn's 30s worker timeout.
+if DATABASE_URL:
+    from psycopg2.extras import DictCursor  # noqa: F401
+    from psycopg2.pool import ThreadedConnectionPool  # noqa: F401
+
 _POOL = None
 _POOL_LOCK = threading.Lock()
 
